@@ -1,31 +1,31 @@
 <h1>Alpschwein Verlosung 2026</h1>
 <form>
     <div>
-        <label>Vorname</label>
-        <input type="text" [field]="registerForm.firstName"/>
+        <label for="firstName">Vorname</label>
+        <input id="firstName" type="text" [field]="registerForm.firstName"/>
 
-        <label>Nachname</label>
-        <input type="text" [field]="registerForm.lastName"/>
+        <label for="lastName">Nachname</label>
+        <input id="lastName" type="text" [field]="registerForm.lastName"/>
     </div>
 
     <div>
-        <label>Straße und Hausnummer</label>
-        <input type="text" [field]="registerForm.street"/>
+        <label for="street">Straße und Hausnummer</label>
+        <input id="street" type="text" [field]="registerForm.street"/>
 
-        <label>Adresszeile 2</label>
-        <input type="text" [field]="registerForm.addressLine2"/>
+        <label for="addressLine2">Adresszeile 2</label>
+        <input id="addressLine2" type="text" [field]="registerForm.addressLine2"/>
 
-        <label>Postleitzahl</label>
-        <input type="text" [field]="registerForm.postalCode"/>
+        <label for="postalCode">Postleitzahl</label>
+        <input id="postalCode" type="text" [field]="registerForm.postalCode"/>
 
-        <label>Stadt</label>
-        <input type="text" [field]="registerForm.city"/>
+        <label for="city">Stadt</label>
+        <input id="city" type="text" [field]="registerForm.city"/>
     </div>
 
     <p>Wie viele Lose möchten Sie kaufen? (Stückpreis 5€)</p>
     <div>
-        <label>Tipp</label>
-        <input type="number" [field]="registerForm.weight"/>
+        <label for="weight">Tipp</label>
+        <input id="weight" type="number" [field]="registerForm.weight"/>
 
         <button type="button">Los hinzufügen</button>
     </div>
