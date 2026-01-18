@@ -37,7 +37,7 @@ test.describe('Shop Homepage', () => {
 
   test('should have proper page title and meta', async ({ page }) => {
     // Check page title
-    await expect(page).toHaveTitle(/shop/i);
+    await expect(page).toHaveTitle(/80 Jahre Bergrettung St. Gallenkirch/i);
 
     // Check viewport is responsive
     const viewport = page.viewportSize();
