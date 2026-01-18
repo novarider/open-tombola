@@ -1,0 +1,34 @@
+<h1>Alpschwein Verlosung 2026</h1>
+<form>
+    <div>
+        <label>Vorname</label>
+        <input type="text" [field]="registerForm.firstName"/>
+
+        <label>Nachname</label>
+        <input type="text" [field]="registerForm.lastName"/>
+    </div>
+
+    <div>
+        <label>Straße und Hausnummer</label>
+        <input type="text" [field]="registerForm.street"/>
+
+        <label>Adresszeile 2</label>
+        <input type="text" [field]="registerForm.addressLine2"/>
+
+        <label>Postleitzahl</label>
+        <input type="text" [field]="registerForm.postalCode"/>
+
+        <label>Stadt</label>
+        <input type="text" [field]="registerForm.city"/>
+    </div>
+
+    <p>Wie viele Lose möchten Sie kaufen? (Stückpreis 5€)</p>
+    <div>
+        <label>Tipp</label>
+        <input type="number" [field]="registerForm.weight"/>
+
+        <button type="button">Los hinzufügen</button>
+    </div>
+
+    <button type="submit">Lose kaufen</button>
+</form>

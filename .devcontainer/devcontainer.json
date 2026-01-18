@@ -14,7 +14,8 @@
 			"upgradePackages": "true"
 		},
 		"ghcr.io/devcontainers/features/git:1": {},
-		"ghcr.io/devcontainers-extra/features/nx-npm": {}
+		"ghcr.io/devcontainers-extra/features/nx-npm": {},
+		"ghcr.io/devcontainers-extra/features/angular-cli:2": {}
 	},
 	"customizations": {
 		"vscode": {

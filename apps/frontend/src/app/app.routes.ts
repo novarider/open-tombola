@@ -1,4 +1,5 @@
 import { Route } from '@angular/router';
+import { RegisterComponent } from './register-component';
 
 export const appRoutes: Route[] = [
   {
@@ -17,6 +18,10 @@ export const appRoutes: Route[] = [
       import('@org/shop/feature-product-detail').then(
         (m) => m.featureProductDetailRoutes
       ),
+  },
+  {
+    path: 'register',
+    component: RegisterComponent
   },
   {
     path: '**',
