@@ -1,33 +1,63 @@
 <h1>Alpschwein Verlosung 2026</h1>
-<form>
-    <div>
-        <label for="firstName">Vorname</label>
-        <input id="firstName" type="text" [field]="registerForm.firstName"/>
-
-        <label for="lastName">Nachname</label>
-        <input id="lastName" type="text" [field]="registerForm.lastName"/>
+<form (submit)="onSubmit($event)">
+    <div class="group">
+        <div class="form-group">
+            @let formField = registerForm.firstName;
+            <label for="firstName">Vorname</label>
+            <input id="firstName" type="text" [field]="formField" />
+            @if (formField().invalid() &&
+            formField().touched()
+            ) {
+            @for (error of formField().errors(); track error.kind) {
+            <span>{{error.message}}</span>
+            }
+            }
+        </div>
+        <div class="form-group">
+            <label for="lastName">Nachname</label>
+            @if (registerForm.lastName().invalid() &&
+            registerForm.lastName().touched()
+            ) {
+            @for (error of registerForm.lastName().errors(); track error.kind) {
+            <span>{{error.message}}</span>
+            }
+            }
+            <input id="lastName" type="text" [field]="registerForm.lastName" />
+        </div>
     </div>
 
     <div>
         <label for="street">Straße und Hausnummer</label>
-        <input id="street" type="text" [field]="registerForm.street"/>
-
+        <input id="street" type="text" [field]="registerForm.street" />
+    </div>
+    <div>
         <label for="addressLine2">Adresszeile 2</label>
-        <input id="addressLine2" type="text" [field]="registerForm.addressLine2"/>
-
+        <input id="addressLine2" type="text" [field]="registerForm.addressLine2" />
+    </div>
+    <div>
         <label for="postalCode">Postleitzahl</label>
-        <input id="postalCode" type="text" [field]="registerForm.postalCode"/>
-
-        <label for="city">Stadt</label>
-        <input id="city" type="text" [field]="registerForm.city"/>
+        <input id="postalCode" type="text" [field]="registerForm.postalCode" />
+    </div>
+    <div>
+        <label for="city">Wohnort</label>
+        <input id="city" type="text" [field]="registerForm.city" />
     </div>
 
     <p>Wie viele Lose möchten Sie kaufen? (Stückpreis 5€)</p>
     <div>
-        <label for="weight">Tipp</label>
-        <input id="weight" type="number" [field]="registerForm.weight"/>
+        @for (ticket of registerForm.tickets; let i = $index; track i) {
+        <div class="ticket">
+            <label for="weight">Tipp {{i}}</label>
+            <input id="weight" type="number" [field]="ticket.weight" />
+            <button type="button" (click)="removeTicket(i)">Los entfernen</button>
+        </div>
+        }
+    </div>
 
-        <button type="button">Los hinzufügen</button>
+    <div>
+        <button type="button" (click)="addTickets()">1 Los hinzufügen</button>
+        <button type="button" (click)="addTickets(10)">10 Lose hinzufügen</button>
+        <button type="button" (click)="addTickets(20)">20 Lose hinzufügen</button>
     </div>
 
     <button type="submit">Lose kaufen</button>

@@ -1,5 +1,8 @@
 import { Route } from '@angular/router';
 import { RegisterComponent } from './register-component';
+import { CartComponent } from './cart/cart';
+import { PaymentSuccessfull } from './payment-successfull';
+import { PaymentCancelled } from './payment-cancelled';
 
 export const appRoutes: Route[] = [
   {
@@ -22,6 +25,14 @@ export const appRoutes: Route[] = [
   {
     path: 'register',
     component: RegisterComponent
+  },
+  {
+    path: 'checkout/success',
+    component: PaymentSuccessfull
+  },
+  {
+    path: 'checkout/cancel',
+    component: PaymentCancelled
   },
   {
     path: '**',
