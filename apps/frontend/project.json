@@ -4,15 +4,21 @@
   "projectType": "application",
   "prefix": "app",
   "sourceRoot": "apps/frontend/src",
-  "tags": ["scope:shop"],
+  "tags": [
+    "scope:shop"
+  ],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/frontend",
         "browser": "apps/frontend/src/main.ts",
-        "polyfills": ["zone.js"],
+        "polyfills": [
+          "zone.js"
+        ],
         "tsConfig": "apps/frontend/tsconfig.app.json",
         "assets": [
           {
@@ -20,12 +26,9 @@
             "input": "apps/frontend/public"
           }
         ],
-        "styles": ["apps/frontend/src/styles.css"],
-        "server": "apps/frontend/src/main.server.ts",
-        "ssr": {
-          "entry": "apps/frontend/src/server.ts"
-        },
-        "outputMode": "server"
+        "styles": [
+          "apps/frontend/src/styles.css"
+        ]
       },
       "configurations": {
         "production": {
@@ -52,7 +55,9 @@
       "defaultConfiguration": "production"
     },
     "serve": {
-      "dependsOn": ["api:serve"],
+      "dependsOn": [
+        "api:serve"
+      ],
       "continuous": true,
       "executor": "@angular/build:dev-server",
       "configurations": {
@@ -80,7 +85,9 @@
     },
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{options.reportsDirectory}"
+      ],
       "options": {
         "reportsDirectory": "../../coverage/apps/frontend"
       }

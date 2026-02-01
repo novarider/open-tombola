@@ -1,13 +1,14 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { BRIcon } from './icon/icon';
 
 @Component({
-  imports: [RouterModule],
+  imports: [RouterModule, BRIcon],
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {
-  protected title = 'Nx Shop Demo';
+  protected title = '80 Jahre Bergrettung St. Gallenkirch';
 }

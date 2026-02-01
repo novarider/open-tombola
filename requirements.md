@@ -14,6 +14,9 @@
 - nach erfolgreicher zahlung werden die formulardaten mit zahlungsbestätigung verknüpft
 - user kommt auf die bestätigung seite mit eingegebenen daten und anzahl lose (mit optionalem pdf download?)
 
+register form --> register backend --> payment url --> payment website ---> payment successfull
+                                                                        |-> payment cancelled/failed
+
 # Offline workflow
 
 - user kauft lose bei bergretter
@@ -23,7 +26,10 @@
 - formular wird gespeichert mit hinweis auf zahlung erfolgt
 - user kommt auf die bestätigung seite mit eingegebenen daten und anzahl lose (mit optionalem pdf download?)
 
-# Admin seite
+scan qr code --> register form --> backend checks validity --> entry successfull
+                                                            |-> entry cancelled/failed (retry possible)
+
+# Admin seite/endpoints
 
 - generierung von offline sale ids + qr codes
 - download aller eingegebenen daten über das formular als csv

@@ -1,5 +1,4 @@
 import express from 'express';
-import { ProductsService } from '@org/api/products';
 import { Stripe } from 'stripe';
 
 const host = process.env.HOST ?? '0.0.0.0';
@@ -8,7 +7,6 @@ const stripeApiKey = process.env.API_KEY_STRIPE ? process.env.API_KEY_STRIPE : '
 
 const app = express();
 const stripe = new Stripe(stripeApiKey);
-const productsService = new ProductsService();
 
 // Middleware
 app.use(express.json());

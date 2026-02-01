@@ -2,22 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, ChangeDetectionStrategy, signal, inject } from '@angular/core';
 import { form, Field, required, SchemaPathTree, min, applyEach } from '@angular/forms/signals';
 import { Router, RouterModule } from '@angular/router';
-
-interface Ticket {
-  weight: string;
-}
-
-interface RegisterFormModel {
-  firstName: string;
-  lastName: string;
-
-  street: string;
-  addressLine2: string;
-  postalCode: string;
-  city: string;
-
-  tickets: Ticket[];
-}
+import { Ticket, TicketOrder } from '@novarider/open-tombola/models';
 
 function TicketSchema(item: SchemaPathTree<Ticket>) {
   required(item.weight, { message: 'Gewicht ist erforderlich' });
@@ -35,7 +20,7 @@ export class RegisterComponent {
   private router: Router = inject(Router);
   private httpClient: HttpClient = inject(HttpClient);
 
-  public registerFormModel = signal<RegisterFormModel>({
+  public registerFormModel = signal<TicketOrder>({
     firstName: '',
     lastName: '',
 

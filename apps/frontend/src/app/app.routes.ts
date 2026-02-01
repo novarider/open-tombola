@@ -1,29 +1,22 @@
 import { Route } from '@angular/router';
-import { RegisterComponent } from './register-component';
-import { CartComponent } from './cart/cart';
-import { PaymentSuccessfull } from './payment-successfull';
-import { PaymentCancelled } from './payment-cancelled';
+import { RegisterComponent } from './register/register-component';
+import { PaymentSuccessfull } from './payment-successfull/payment-successfull';
+import { PaymentCancelled } from './payment-cancelled/payment-cancelled';
+import { Legal } from './legal/legal';
+import { ActivateTickets } from './activate-tickets/activate-tickets';
 
 export const appRoutes: Route[] = [
   {
     path: '',
-    redirectTo: 'products',
+    redirectTo: 'tickets/register',
     pathMatch: 'full',
   },
   {
-    path: 'products',
-    loadChildren: () =>
-      import('@org/shop/feature-products').then((m) => m.featureProductsRoutes),
+    path: 'tickets/activate',
+    component: ActivateTickets
   },
   {
-    path: 'products',
-    loadChildren: () =>
-      import('@org/shop/feature-product-detail').then(
-        (m) => m.featureProductDetailRoutes
-      ),
-  },
-  {
-    path: 'register',
+    path: 'tickets/register',
     component: RegisterComponent
   },
   {
@@ -33,6 +26,10 @@ export const appRoutes: Route[] = [
   {
     path: 'checkout/cancel',
     component: PaymentCancelled
+  },
+  {
+    path: 'legal',
+    component: Legal
   },
   {
     path: '**',
