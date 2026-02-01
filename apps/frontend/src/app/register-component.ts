@@ -73,7 +73,7 @@ export class RegisterComponent {
     }
   }
 
-  public addTickets(amount: number = 1): void {
+  public addTickets(amount = 1): void {
     this.registerFormModel.update((value) => ({
       ...value,
       tickets: [...value.tickets, ...Array.from({ length: amount }).map(() => ({ weight: '' }))]
