@@ -1,8 +1,18 @@
+:host {
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-columns: repeat(7, 1fr);
+}
+
 .app-header {
-  background: #2c3e50;
-  color: white;
+  background: var(--background-secondary-color);
+  color: var(--font-secondary-color);
   padding: 1rem 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  grid-row: 1;
+  grid-column: 1 / 10;
 }
 
 .app-header .container {
@@ -39,28 +49,32 @@
 }
 
 .app-header nav a.active {
-  background: #3498db;
+  background: var(--primary-color);
 }
 
 .app-main {
-  min-height: calc(100vh - 140px);
-  background: #f5f5f5;
+  background: var(--background-color);
+  grid-row: 2;
+
+  grid-column: 1 / 9;
+
+  @media (min-width: 600px) {
+    grid-column: 2 / 8;
+  }
+
+  @media (min-width: 900px) {
+    grid-column: 3 / 6;
+  }
+
+  overflow-y: auto;
 }
 
 .app-footer {
-  background: #34495e;
-  color: white;
+  background: var(--background-secondary-color);
+  color: var(--font-secondary-color);
   padding: 24px 0;
   text-align: center;
-}
 
-.app-footer .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-.app-footer p {
-  margin: 8px 0;
-  font-size: 0.9rem;
+  grid-row: 3;
+  grid-column: 1 / 10;
 }

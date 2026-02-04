@@ -28,6 +28,7 @@ export class RegisterComponent {
     addressLine2: '',
     postalCode: '',
     city: '',
+    country: '',
 
     tickets: [
       { weight: '' },
@@ -41,6 +42,7 @@ export class RegisterComponent {
     required(schemaPath.street, { message: 'Bitte geben Sie Ihre Straße und Hausnummer ein' });
     required(schemaPath.postalCode, { message: 'Bitte geben Sie Ihre Postleitzahl ein' });
     required(schemaPath.city, { message: 'Bitte geben Sie Ihren Wohnort ein' });
+    required(schemaPath.country, { message: 'Bitte geben Sie Ihr Heimatland ein' });
 
     applyEach(schemaPath.tickets, TicketSchema);
   });
@@ -65,10 +67,15 @@ export class RegisterComponent {
     }));
   }
 
-  public removeTicket(index: number): void {
+  public removeTicket(index: number, event: Event): void {
+    event.stopPropagation();
     this.registerFormModel.update((value) => ({
       ...value,
       tickets: value.tickets.filter((_, i) => i !== index),
     }));
+  }
+
+  public focusInput(event: Event): void {
+    (event.target as HTMLElement).querySelector('input')?.focus();
   }
 }

@@ -26,39 +26,49 @@
         </div>
     </div>
 
-    <div>
+    <div class="form-group">
         <label for="street">Straße und Hausnummer</label>
         <input id="street" type="text" [field]="registerForm.street" />
     </div>
-    <div>
+    <div class="form-group">
         <label for="addressLine2">Adresszeile 2</label>
         <input id="addressLine2" type="text" [field]="registerForm.addressLine2" />
     </div>
-    <div>
-        <label for="postalCode">Postleitzahl</label>
-        <input id="postalCode" type="text" [field]="registerForm.postalCode" />
+    <div class="group">
+        <div class="form-group">
+            <label for="postalCode">Postleitzahl</label>
+            <input id="postalCode" type="text" [field]="registerForm.postalCode" />
+        </div>
+        <div class="form-group">
+            <label for="city">Wohnort</label>
+            <input id="city" type="text" [field]="registerForm.city" />
+        </div>
     </div>
-    <div>
-        <label for="city">Wohnort</label>
-        <input id="city" type="text" [field]="registerForm.city" />
+    <div class="form-group">
+        <label for="country">Land</label>
+        <input id="country" type="text" [field]="registerForm.country" />
     </div>
 
     <p>Wie viele Lose möchten Sie kaufen? (Stückpreis 5€)</p>
-    <div>
+    <div class="tickets-container">
         @for (ticket of registerForm.tickets; let i = $index; track i) {
-        <div class="ticket">
-            <label for="weight">Tipp {{i}}</label>
-            <input id="weight" type="number" [field]="ticket.weight" />
-            <button type="button" (click)="removeTicket(i)">Los entfernen</button>
+        <div class="ticket" tabindex="0" (click)="focusInput($event)" (keypress)="focusInput($event)">
+            <div class="form-group">
+                <label [attr.for]="'weight'+i">Tipp {{i+1}}</label>
+                <input [attr.id]="'weight'+i" type="number" [field]="ticket.weight" />
+            </div>
+            <button type="button" (click)="removeTicket(i, $event)">&#x1F5D1;</button>
         </div>
         }
     </div>
 
-    <div>
-        <button type="button" (click)="addTickets()">1 Los hinzufügen</button>
-        <button type="button" (click)="addTickets(10)">10 Lose hinzufügen</button>
-        <button type="button" (click)="addTickets(20)">20 Lose hinzufügen</button>
+    <div class="add-ticket-buttons">
+        <button type="button" class="button secondary" (click)="addTickets()">1 Los hinzufügen</button>
+        <button type="button" class="button secondary" (click)="addTickets(10)">10 Lose hinzufügen</button>
+        <button type="button" class="button secondary" (click)="addTickets(20)">20 Lose hinzufügen</button>
     </div>
 
-    <button type="submit">Lose kaufen</button>
+    <div class="submit-button-wrapper">
+        <button type="submit" class="button primary">Lose kaufen</button>
+    </div>
 </form>

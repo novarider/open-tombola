@@ -4,12 +4,17 @@ import { PaymentSuccessfull } from './payment-successfull/payment-successfull';
 import { PaymentCancelled } from './payment-cancelled/payment-cancelled';
 import { Legal } from './legal/legal';
 import { ActivateTickets } from './activate-tickets/activate-tickets';
+import { Home } from './home/home';
 
 export const appRoutes: Route[] = [
   {
     path: '',
-    redirectTo: 'tickets/register',
+    redirectTo: 'home',
     pathMatch: 'full',
+  },
+  {
+    path: 'home',
+    component: Home
   },
   {
     path: 'tickets/activate',
@@ -33,6 +38,6 @@ export const appRoutes: Route[] = [
   },
   {
     path: '**',
-    redirectTo: 'products',
+    redirectTo: '',
   },
 ];

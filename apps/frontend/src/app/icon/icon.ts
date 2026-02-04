@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
     templateUrl: './icon.html',
     styles: [`
         svg {
-        height: 10rem;
+        height: 5rem;
         }
     `]
 })
