@@ -10,7 +10,7 @@ export class TicketRepository implements ITicketRepository {
 
     public async saveTickets(ticket: TicketDBO[]): Promise<TicketDBO[]> {
         try {
-            await this.dbConnection.db.tx((tx) => {
+            await this.dbConnection.dbOpenTombola.tx((tx) => {
                 const insertQueries = ticket.map(t => tx.none("INSERT INTO ticket (ticketId, fk_orderId, weight) VALUES (?, ?, ?)", [t.ticketId, t.fk_orderId, t.weight]));
                 tx.batch(insertQueries);
             });
@@ -21,7 +21,7 @@ export class TicketRepository implements ITicketRepository {
     }
 
     public async getTicketsForOrder(orderId: string): Promise<TicketDBO[]> {
-        return await this.dbConnection.db.manyOrNone("SELECT * FROM ticket WHERE fk_orderId = ?", [orderId]);
+        return await this.dbConnection.dbOpenTombola.manyOrNone("SELECT * FROM ticket WHERE fk_orderId = ?", [orderId]);
     }
 
 }

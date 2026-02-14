@@ -34,8 +34,9 @@ export class App {
     private dBConnection: DBConnection;
 
     public async startApp(): Promise<void> {
-        // connect database
+        // connect and init database
         await this.dBConnection.connect();
+        await this.dBConnection.prepareOpenTombolaDB();
 
         // Middleware
         this.middlewares.registerMiddleware();

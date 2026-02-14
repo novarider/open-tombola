@@ -38,7 +38,7 @@ export class CheckoutController {
                     paymentUrl: session.url
                 });
             } catch (error) {
-                res.status(500).send();
+                res.status(500).send(error);
             }
         });
 

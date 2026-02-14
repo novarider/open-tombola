@@ -15,7 +15,18 @@ export class OrderService {
     private ticketRepository: ITicketRepository;
 
     public async saveOrder(ticktetOrder: TicketOrder): Promise<OrderDBO> {
-        const order = await this.orderRepository.saveOrder(ticktetOrder)
+        const order = await this.orderRepository.saveOrder({
+            orderId: uuid(),
+            createdAt: new Date(Date.now()),
+            payedAt: null,
+            firstName: ticktetOrder.firstName,
+            lastName: ticktetOrder.lastName,
+            street: ticktetOrder.street,
+            addressLine2: ticktetOrder.addressLine2,
+            postalCode: ticktetOrder.postalCode,
+            city: ticktetOrder.city,
+            country: ticktetOrder.country
+        });
         this.ticketRepository.saveTickets(ticktetOrder.tickets.map(t => ({ fk_orderId: order.orderId, ticketId: uuid(), weight: Number.parseFloat(t.weight) })));
         return order;
     }

@@ -8,16 +8,45 @@ export class OrderRepository implements IOrderRepository {
     @Inject(() => DBConnection)
     private dbConnection: DBConnection;
 
-    public async saveOrder(ticketOrder: TicketOrder): Promise<OrderDBO> {
-        return await this.dbConnection.db.query("INSERT INTO `order` (firstName, lastName, street, addressLine2, postalCode, city, country) VALUES (?, ?, ?, ?, ?, ?, ?)", [
-            ticketOrder.firstName,
-            ticketOrder.lastName,
-            ticketOrder.street,
-            ticketOrder.addressLine2,
-            ticketOrder.postalCode,
-            ticketOrder.city,
-            ticketOrder.country
-        ]);
+    public async saveOrder(ticketOrder: OrderDBO): Promise<OrderDBO> {
+        try {
+            return await this.dbConnection.dbOpenTombola.query(`INSERT INTO orders (
+                    orderId, 
+                    firstName, 
+                    lastName, 
+                    street, 
+                    addressLine2, 
+                    postalCode, 
+                    city, 
+                    country, 
+                    createdAt, 
+                    payedAt
+                ) VALUES (
+                    $1,
+                    $2,
+                    $3,
+                    $4,
+                    $5,
+                    $6,
+                    $7,
+                    $8,
+                    $9,
+                    $10
+                )`, [
+                ticketOrder.orderId,
+                ticketOrder.firstName,
+                ticketOrder.lastName,
+                ticketOrder.street,
+                ticketOrder.addressLine2,
+                ticketOrder.postalCode,
+                ticketOrder.city,
+                ticketOrder.country,
+                ticketOrder.createdAt,
+                ticketOrder.payedAt,
+            ]);
+        } catch (error) {
+            console.error("Error saving order:", error);
+        }
     }
 
     public async updateOrder(updatedOrder: OrderDBO): Promise<OrderDBO> {
@@ -29,6 +58,6 @@ export class OrderRepository implements IOrderRepository {
     }
 
     public async getOrder(orderId: string): Promise<OrderDBO> {
-        return await this.dbConnection.db.query("SELECT * FROM `order` WHERE orderId = ?", [orderId]);
+        return await this.dbConnection.dbOpenTombola.query("SELECT * FROM `order` WHERE orderId = ?", [orderId]);
     }
 }
