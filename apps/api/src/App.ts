@@ -2,7 +2,7 @@ import { Inject, Service } from "typedi";
 import { Application } from "express-serve-static-core";
 import { AppMiddleware } from "./AppMiddleware";
 import { AppHeaders } from "./AppHeaders";
-import { RootController, CheckoutController, TicketController } from "@org/api/products";
+import { RootController, CheckoutController, TicketController, DBConnection } from "@org/api/products";
 
 @Service()
 export class App {
@@ -30,7 +30,13 @@ export class App {
     @Inject(() => TicketController)
     private ticketController: TicketController;
 
-    public startApp(): void {
+    @Inject(() => DBConnection)
+    private dBConnection: DBConnection;
+
+    public async startApp(): Promise<void> {
+        // connect database
+        await this.dBConnection.connect();
+
         // Middleware
         this.middlewares.registerMiddleware();
 
