@@ -1,8 +1,6 @@
-import { Stripe } from 'stripe';
 import { Request, Application } from 'express';
-import Container, { Inject, Service } from 'typedi';
-import { OrderRepository } from '../DAL/OrderRepository';
-import { Ticket, TicketOrder } from '@novarider/open-tombola/models';
+import { Inject, Service } from 'typedi';
+import { TicketOrder } from '@novarider/open-tombola/models';
 import { OrderService } from '../BL/OrderService';
 
 interface CheckoutCreateRequest extends Request {
@@ -23,8 +21,6 @@ export class CheckoutController {
     @Inject(() => OrderService)
     private orderService: OrderService;
 
-    private stripe = new Stripe(Container.get('stripe-api-key'));
-
     public registerRoutes() {
         this.app.post('/checkout/create', async (req: CheckoutCreateRequest, res) => {
             try {
@@ -32,35 +28,28 @@ export class CheckoutController {
 
                 const quantity = req.body.tickets.length;
 
-                const session = await this.createPaymentSession(quantity, order.orderId);
+                const session = await this.orderService.createPaymentSession(quantity, order.orderid);
+
+                await this.orderService.saveOrderPaymentReference(order.orderid, session.id);
 
                 return res.json({
                     paymentUrl: session.url
                 });
             } catch (error) {
+                console.error("Error creating checkout session:", error);
                 res.status(500).send(error);
             }
         });
 
         this.app.post('/checkout/confirmPayment', async (req: ConfirmPaymentRequest, res) => {
             try {
-                await this.orderService.updateOrdersPaymentStatus(req.body.orderId, true);
+                console.debug(JSON.stringify(req.body));
+                await this.orderService.checkCheckoutStatusForOrder(req.body.orderId);
                 res.status(200).send();
             } catch (error) {
+                console.error("Error confirming payment:", error);
                 res.status(500).send();
             }
-        });
-    }
-
-    private async createPaymentSession(amount: number, orderId: string): Promise<Stripe.Response<Stripe.Checkout.Session>> {
-        return await this.stripe.checkout.sessions.create({
-            line_items: [{
-                price: 'price_1Svi0kA2DLsR0rymvypQGdBZ',
-                quantity: amount,
-            }],
-            mode: 'payment',
-            success_url: `http://localhost:4200/checkout/success?orderId=${orderId}`,
-            cancel_url: 'http://localhost:4200/checkout/cancel',
         });
     }
 }

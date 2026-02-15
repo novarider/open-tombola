@@ -8,20 +8,21 @@ export class TicketRepository implements ITicketRepository {
     @Inject(() => DBConnection)
     private dbConnection: DBConnection;
 
-    public async saveTickets(ticket: TicketDBO[]): Promise<TicketDBO[]> {
+    public async saveTickets(tickets: TicketDBO[]): Promise<TicketDBO[]> {
         try {
-            await this.dbConnection.dbOpenTombola.tx((tx) => {
-                const insertQueries = ticket.map(t => tx.none("INSERT INTO ticket (ticketId, fk_orderId, weight) VALUES (?, ?, ?)", [t.ticketId, t.fk_orderId, t.weight]));
-                tx.batch(insertQueries);
+            await this.dbConnection.dbOpenTombola.tx(async (tx) => {
+                for (const ticket of tickets) {
+                    await tx.none("INSERT INTO tickets (ticketId, fk_orderId, weight) VALUES ($1, $2, $3)", [ticket.ticketId, ticket.fk_orderId, ticket.weight]);
+                }
             });
-            return this.getTicketsForOrder(ticket[0].fk_orderId);
+            return this.getTicketsForOrder(tickets[0].fk_orderId);
         } catch (error) {
+            console.error("Error saving tickets:", error);
             return [];
         }
     }
 
     public async getTicketsForOrder(orderId: string): Promise<TicketDBO[]> {
-        return await this.dbConnection.dbOpenTombola.manyOrNone("SELECT * FROM ticket WHERE fk_orderId = ?", [orderId]);
+        return await this.dbConnection.dbOpenTombola.manyOrNone<TicketDBO>("SELECT * FROM tickets WHERE fk_orderId = $1", [orderId]);
     }
-
 }

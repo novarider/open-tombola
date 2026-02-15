@@ -14,16 +14,17 @@ export interface TicketOrder {
 }
 
 export interface OrderDBO {
-  orderId: string;
-  createdAt: Date;
-  payedAt: Date | null;
+  orderid: string;
+  createdat: Date;
+  paymentreference: string | null;
+  checkoutdoneat: Date | null;
 
-  firstName: string;
-  lastName: string;
+  firstname: string;
+  lastname: string;
 
   street: string;
-  addressLine2: string;
-  postalCode: string;
+  addressline2: string;
+  postalcode: string;
   city: string;
   country: string;
 }

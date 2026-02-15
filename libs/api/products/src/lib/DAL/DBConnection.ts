@@ -1,5 +1,6 @@
 import { Inject, Service } from "typedi";
-import pgpromise from "pg-promise";
+import pgpromise = require('pg-promise');
+
 
 @Service()
 export class DBConnection {
@@ -16,8 +17,8 @@ export class DBConnection {
     private dbPassword!: string;
 
     private pgp = pgpromise({});
-    private dbPostgres;
-    public dbOpenTombola;
+    private dbPostgres: pgpromise.IDatabase<unknown>;
+    public dbOpenTombola: pgpromise.IDatabase<unknown>;
 
     public async connect() {
         this.dbPostgres = await this.pgp(`postgres://${this.dbUsername}:${this.dbPassword}@${this.dbHost}:${this.dbPort}/postgres`);
@@ -36,17 +37,18 @@ export class DBConnection {
     }
 
     private async createOrdersTableIfNotExists(): Promise<void> {
-        await this.dbOpenTombola.any(`CREATE TABLE IF NOT EXISTS orders (
-                orderId varchar(36) primary key,
+        await this.dbOpenTombola.query(`CREATE TABLE IF NOT EXISTS orders (
+                orderid varchar(36) primary key,
                 firstname varchar(100),
                 lastname varchar(100),
                 street varchar(100),
-                addressLine2 varchar(100),
-                postalCode varchar(100),
+                addressline2 varchar(100),
+                postalcode varchar(100),
                 city varchar(100),
                 country varchar(100),
-                createdAt timestamp,
-                payedAt timestamp
+                createdat timestamp,
+                checkoutdoneat timestamp,
+                paymentreference varchar(255)
             );`);
         console.log(`Table orders ready to use.`);
     }
