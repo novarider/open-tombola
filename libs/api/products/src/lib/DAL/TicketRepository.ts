@@ -12,10 +12,10 @@ export class TicketRepository implements ITicketRepository {
         try {
             await this.dbConnection.dbOpenTombola.tx(async (tx) => {
                 for (const ticket of tickets) {
-                    await tx.none("INSERT INTO tickets (ticketId, fk_orderId, weight) VALUES ($1, $2, $3)", [ticket.ticketId, ticket.fk_orderId, ticket.weight]);
+                    await tx.none("INSERT INTO tickets (ticketid, fk_orderid, weight) VALUES ($1, $2, $3)", [ticket.ticketid, ticket.fk_orderid, ticket.weight]);
                 }
             });
-            return this.getTicketsForOrder(tickets[0].fk_orderId);
+            return this.getTicketsForOrder(tickets[0].fk_orderid);
         } catch (error) {
             console.error("Error saving tickets:", error);
             return [];
@@ -23,6 +23,6 @@ export class TicketRepository implements ITicketRepository {
     }
 
     public async getTicketsForOrder(orderId: string): Promise<TicketDBO[]> {
-        return await this.dbConnection.dbOpenTombola.manyOrNone<TicketDBO>("SELECT * FROM tickets WHERE fk_orderId = $1", [orderId]);
+        return await this.dbConnection.dbOpenTombola.manyOrNone<TicketDBO>("SELECT * FROM tickets WHERE fk_orderid = $1", [orderId]);
     }
 }

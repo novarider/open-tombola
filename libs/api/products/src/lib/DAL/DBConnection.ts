@@ -46,20 +46,30 @@ export class DBConnection {
                 postalcode varchar(100),
                 city varchar(100),
                 country varchar(100),
-                createdat timestamp,
-                checkoutdoneat timestamp,
-                paymentreference varchar(255)
+                createdat timestamp
             );`);
         console.log(`Table orders ready to use.`);
     }
 
     private async createTicketsTableIfNotExists(): Promise<void> {
         await this.dbOpenTombola.any(`CREATE TABLE IF NOT EXISTS tickets (
-            ticketId varchar(36) primary key,
-            fk_orderId varchar(36) references orders (orderId),
-            weight real NOT NULL
+                ticketid varchar(36) primary key,
+                fk_orderid varchar(36) references orders (orderId),
+                weight real NOT NULL
             );`);
         console.log(`Table tickets ready to use.`);
+    }
+
+    private async createCheckoutsTableIfNotExists(): Promise<void> {
+        await this.dbOpenTombola.any(`CREATE TABLE IF NOT EXISTS checkouts (
+                checkoutid serial primary key,
+                checkoutstatus varchar(30),
+                checkoutdoneat timestamp,
+                fk_orderid varchar(36) references orders (orderId),
+                paymentreference varchar(255),
+                paymentstatus varchar(30)
+            );`);
+        console.log(`Table checkouts ready to use.`);
     }
 
     public async prepareOpenTombolaDB() {
@@ -67,6 +77,7 @@ export class DBConnection {
         await this.createDBIfNotExists();
         await this.createOrdersTableIfNotExists();
         await this.createTicketsTableIfNotExists();
+        await this.createCheckoutsTableIfNotExists();
     }
 
     public close() {

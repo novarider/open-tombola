@@ -19,9 +19,7 @@ export class OrderRepository implements IOrderRepository {
                     postalCode, 
                     city, 
                     country, 
-                    createdAt, 
-                    checkoutdoneat,
-                    paymentreference
+                    createdAt
                 ) VALUES (
                     $1,
                     $2,
@@ -31,9 +29,7 @@ export class OrderRepository implements IOrderRepository {
                     $6,
                     $7,
                     $8,
-                    $9,
-                    $10,
-                    $11
+                    $9
                 ) RETURNING *`, [
                 ticketOrder.orderid,
                 ticketOrder.firstname,
@@ -44,8 +40,6 @@ export class OrderRepository implements IOrderRepository {
                 ticketOrder.city,
                 ticketOrder.country,
                 ticketOrder.createdat,
-                ticketOrder.checkoutdoneat,
-                ticketOrder.paymentreference
             ]);
         } catch (error) {
             console.error("Error saving order:", error);
@@ -55,16 +49,15 @@ export class OrderRepository implements IOrderRepository {
     public async updateOrder(updatedOrder: OrderDBO): Promise<OrderDBO> {
         try {
             return await this.dbConnection.dbOpenTombola.one<OrderDBO>(`UPDATE orders SET 
-                firstName = $1,
-                lastName = $2,
-                street = $3,
-                addressLine2 = $4,
-                postalCode = $5,
-                city = $6,
-                country = $7,
-                checkoutdoneat = $8,
-                paymentreference = $9
-            WHERE orderId = $10 RETURNING *`, [
+                firstName = $2,
+                lastName = $3,
+                street = $4,
+                addressLine2 = $5,
+                postalCode = $6,
+                city = $7,
+                country = $8
+            WHERE orderId = $1 RETURNING *`, [
+                updatedOrder.orderid,
                 updatedOrder.firstname,
                 updatedOrder.lastname,
                 updatedOrder.street,
@@ -72,9 +65,6 @@ export class OrderRepository implements IOrderRepository {
                 updatedOrder.postalcode,
                 updatedOrder.city,
                 updatedOrder.country,
-                updatedOrder.checkoutdoneat,
-                updatedOrder.paymentreference,
-                updatedOrder.orderid
             ]);
         } catch (error) {
             console.error("Error updating order:", error);

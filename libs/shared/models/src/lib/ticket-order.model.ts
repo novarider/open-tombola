@@ -16,8 +16,6 @@ export interface TicketOrder {
 export interface OrderDBO {
   orderid: string;
   createdat: Date;
-  paymentreference: string | null;
-  checkoutdoneat: Date | null;
 
   firstname: string;
   lastname: string;
@@ -30,7 +28,16 @@ export interface OrderDBO {
 }
 
 export interface TicketDBO {
-  ticketId: string;
-  fk_orderId: string;
+  ticketid: string;
+  fk_orderid: string;
   weight: number;
+}
+
+export interface CheckoutDBO {
+  checkoutid: string;
+  checkoutstatus: string;
+  checkoutdoneat: Date | null;
+  fk_orderid: string;
+  paymentreference: string;
+  paymentstatus: string;
 }
