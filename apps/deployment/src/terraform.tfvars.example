@@ -1,0 +1,36 @@
+# Copy this file to terraform.tfvars and fill in your actual values
+# DO NOT commit terraform.tfvars to version control
+
+# Ionos Cloud credentials
+# Obtain these from your Ionos Cloud account settings
+ionos_username = "your-ionos-username"
+ionos_password = "your-ionos-password"
+ionos_endpoint = "https://api.ionos.com"
+
+# Datacenter configuration
+datacenter_name      = "tombola-dc"
+data_center_location = "de"  # Possible values: de, us, gb, fr
+
+# API Server configuration
+api_cores        = 2      # Number of vCPUs
+api_ram          = 2048   # RAM in MB
+api_disk_size    = 20     # Disk size in GB
+api_image_password = "your-secure-root-password"
+
+# Frontend Server configuration
+frontend_cores        = 2      # Number of vCPUs
+frontend_ram          = 2048   # RAM in MB
+frontend_disk_size    = 20     # Disk size in GB
+frontend_image_password = "your-secure-root-password"
+
+# VM image configuration
+image_name = "ubuntu:latest"
+
+# S3 Storage configuration
+s3_bucket_name = "tombola-backup"
+s3_region      = "eu-central-1"
+
+# Environment configuration
+environment = "prod"
+api_port    = 3333
+api_host    = "0.0.0.0"

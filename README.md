@@ -254,6 +254,93 @@ Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?u
 - [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
 - [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
 
+## 🚀 Deployment to Ionos Cloud
+
+This project includes complete Terraform configuration for deploying to Ionos Cloud.
+
+### Quick Start
+
+```bash
+# 1. Configure your Ionos credentials
+cp apps/deployment/src/terraform.tfvars.example apps/deployment/src/terraform.tfvars
+# Edit terraform.tfvars with your Ionos Cloud credentials
+
+# 2. Initialize and deploy infrastructure
+nx initialize deployment
+nx plan deployment
+nx apply deployment
+
+# 3. Build and deploy applications
+nx build api --configuration=production
+nx build frontend --configuration=production
+./build-docker-images.sh
+```
+
+### Deployment Documentation
+
+- 📖 [Quick Start Guide](apps/deployment/QUICK_START.md) - Get started in 5 minutes
+- 📘 [Full Deployment Guide](apps/deployment/README.md) - Comprehensive step-by-step instructions
+- ✅ [Deployment Checklist](apps/deployment/DEPLOYMENT_CHECKLIST.md) - Ensure nothing is missed
+- 🔧 [Troubleshooting Guide](apps/deployment/TROUBLESHOOTING.md) - Solutions for common issues
+
+### What Gets Deployed
+
+- **API Server**: Node.js/Express backend with Docker containerization
+- **Frontend Server**: Angular application served with Nginx
+- **Database**: PostgreSQL for data storage
+- **Storage**: S3 object storage for backups and files
+- **Networking**: VLANs and firewalls for security
+- **SSL/TLS**: Let's Encrypt certificates for HTTPS
+
+### Terraform Targets
+
+```bash
+# Initialize Terraform
+nx initialize deployment
+
+# Check formatting
+nx fmt deployment
+
+# Plan changes
+nx plan deployment
+
+# Apply changes
+nx apply deployment
+
+# Destroy infrastructure (WARNING: deletes all data!)
+nx destroy deployment
+```
+
+### Architecture
+
+```
+┌─────────────────────────────────────────┐
+│         Frontend Server (VM)            │
+│  - Angular Frontend (SPA)               │
+│  - Nginx Web Server                     │
+│  - SSL/TLS Certificates                 │
+└──────────────┬──────────────────────────┘
+               │
+        ┌──────▼───────┐
+        │   Private    │
+        │     LAN      │
+        └──────┬───────┘
+               │
+┌──────────────▼──────────────────────────┐
+│         API Server (VM)                  │
+│  - Node.js/Express API                  │
+│  - Docker Containerization              │
+│  - Business Logic                       │
+└──────────────┬──────────────────────────┘
+               │
+        ┌──────┴──────────┐
+        │                 │
+┌───────▼────────┐  ┌────▼────────────┐
+│  PostgreSQL    │  │  S3 Storage     │
+│  Database      │  │  Backups/Files  │
+└────────────────┘  └─────────────────┘
+```
+
 ## Install Nx Console
 
 Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
@@ -270,6 +357,8 @@ Nx Console is an editor extension that enriches your developer experience. It le
 - [Vite with Angular](https://nx.dev/recipes/vite)
 - [Nx Cloud](https://nx.dev/ci/intro/why-nx-cloud)
 - [Releasing Packages](https://nx.dev/features/manage-releases)
+- **[Ionos Cloud Deployment Guide](apps/deployment/README.md)** - Deploy to production
+- **[Terraform Registry](https://registry.terraform.io/providers/ionos-cloud/ionoscloud)** - Ionos Provider
 
 ## 💬 Community
 
@@ -280,3 +369,5 @@ Join the Nx community:
 - [LinkedIn](https://www.linkedin.com/company/nrwl)
 - [YouTube](https://www.youtube.com/@nxdevtools)
 - [Blog](https://nx.dev/blog)
+
+

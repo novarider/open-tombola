@@ -53,3 +53,30 @@ vitest.config.*.timestamp*
 playwright-report/
 
 **/.env
+
+# Terraform
+terraform.tfvars
+terraform.tfvars.json
+terraform.tfvars.*.json
+**/*.tfstate
+**/*.tfstate.*.backup
+**/*.tfstate.backup
+.terraform/
+.terraform.lock.hcl
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+**/.terraformrc
+**/.terraform/
+**/terraform.log
+defaultplan
+
+# Deployment
+apps/deployment/src/terraform.tfvars
+apps/deployment/**/.terraform/
+apps/deployment/**/*.tfstate
+apps/deployment/**/*.tfstate.backup
+apps/deployment/src/.terraform.lock.hcl

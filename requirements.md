@@ -1,4 +1,6 @@
-# Ideen
+# Open Tombola
+
+## Ideen
 
 - pre sale (qr code auf los) + online los (stripe)
 - gemeinsame excel mit zeitstempel vom ausfüllen
@@ -6,7 +8,7 @@
 - formulare sperren mit wiegedatum (wenn geht automatisch)
 - verfizierungsprozess bei stripe anschauen/was braucht man wirklich
 
-# Online workflow
+### Online workflow
 
 - user füllt formular aus (name, email, anzahl lose)
 - formular wird gespeichert mit hinweis auf zahlung ausstehend
@@ -17,7 +19,7 @@
 register form --> register backend --> payment url --> payment website ---> payment successfull
                                                                         |-> payment cancelled/failed
 
-# Offline workflow
+### Offline workflow
 
 - user kauft lose bei bergretter
 - lose haben qr code aufgedruckt mit eindeutiger los id
@@ -29,8 +31,25 @@ register form --> register backend --> payment url --> payment website ---> paym
 scan qr code --> register form --> backend checks validity --> entry successfull
                                                             |-> entry cancelled/failed (retry possible)
 
-# Admin seite/endpoints
+### Admin seite/endpoints
 
 - generierung von offline sale ids + qr codes
 - download aller eingegebenen daten über das formular als csv
   - schätzwert, name, addresse, zeitstempel der zahlung, los id
+
+### Todo
+
+telefonnummer dazua
+zahlengenerator für auslosung
+serienbrief für gedruckte lose
+domain lösen www.80-jahre-st-gallenkirch.at
+24. Oktober festdatum
+17. Oktober 12:00 Stichtag für Anmeldungen
+
+## Deployment
+
+- Deployment must happen on IONOS Cloud hosted in Europe/Frankfurt am Main
+- A PostgresSQL Database as SaaS will be used, this includes DB backups
+- A Kubernetescluster will handle the api and frontend as nodes
+- A docker registry is needed for the cluster to fetch images
+- The webpage should be reachable under https://80-jahre-bergrettung.at
