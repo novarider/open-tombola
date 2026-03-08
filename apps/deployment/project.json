@@ -67,6 +67,21 @@
         "workspace": "default",
         "workspaceAction": "select"
       }
+    },
+    "k8s-create-namespace": {
+      "command": "kubectl create ns open-tombola"
+    },
+    "k8s-delete-namespace": {
+      "command": "kubectl delete ns open-tombola"
+    },
+    "k8s-apply-frontend-deployment": {
+      "command": "kubectl apply -f apps/deployment/kubernetes/frontend.yml -n open-tombola"
+    },
+    "k8s-apply-frontend-service": {
+      "command": "kubectl apply -f apps/deployment/kubernetes/frontend-load-balancer.yml -n open-tombola"
+    },
+    "k8s-get-services": {
+      "command": "kubectl get services -n open-tombola"
     }
   },
   "tags": []

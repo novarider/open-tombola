@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open-tombola-frontend-deployment
+  labels:
+    app: open-tombola-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: open-tombola-frontend
+  template:
+    metadata:
+      labels:
+        app: open-tombola-frontend
+    spec:
+      containers:
+        - name: open-tombola-frontend
+          image: nginx
+          ports:
+            - containerPort: 80

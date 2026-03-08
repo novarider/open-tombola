@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open-tombola-database-deployment
+  labels:
+    app: open-tombola-database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: open-tombola-database
+  template:
+    metadata:
+      labels:
+        app: open-tombola-database
+    spec:
+      containers:
+      - name: open-tombola-database
+        image: postgres
+        ports:
+        - containerPort: 5432

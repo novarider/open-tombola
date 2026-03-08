@@ -6,6 +6,9 @@
 	"build": {
 		"dockerfile": "./Dockerfile"
 	},
+	"containerEnv": {
+		"KUBECONFIG": "/home/open-tombola/scripts/k8s/kubeconfig-cz2nls.yml"
+	},
 	"features": {
 		"ghcr.io/devcontainers/features/common-utils": {
 			"installZsh": true,
@@ -16,10 +19,11 @@
 		"ghcr.io/devcontainers/features/git:1": {},
 		"ghcr.io/devcontainers-extra/features/nx-npm": {},
 		"ghcr.io/devcontainers-extra/features/angular-cli:2": {},
-		"ghcr.io/devcontainers/features/docker-in-docker": {},
+		"ghcr.io/devcontainers/features/docker-outside-of-docker": {},
 		"ghcr.io/devcontainers/features/terraform": {
 			"version": "1.9.0"
-		}
+		},
+		"ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {}
 	},
 	"customizations": {
 		"vscode": {
@@ -30,7 +34,8 @@
 		}
 	},
 	"mounts": [
-		"source=${localEnv:HOME}/.ssh,target=/home/open-tombola/.ssh,type=bind,consistency=cached"
+		"source=${localEnv:HOME}/.ssh,target=/home/open-tombola/.ssh,type=bind,consistency=cached",
+		"source=${localEnv:HOME}/scripts,target=/home/open-tombola/scripts,type=bind,consistency=cached"
 	],
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
