@@ -44,12 +44,24 @@
               "maximumError": "8kb"
             }
           ],
-          "outputHashing": "all"
+          "outputHashing": "all",
+          "fileReplacements": [
+            {
+              "replace": "apps/frontend/src/environments/environment.ts",
+              "with": "apps/frontend/src/environments/environment.production.ts"
+            }
+          ]
         },
         "development": {
           "optimization": false,
           "extractLicenses": false,
-          "sourceMap": true
+          "sourceMap": true,
+          "fileReplacements": [
+            {
+              "replace": "apps/frontend/src/environments/environment.ts",
+              "with": "apps/frontend/src/environments/environment.development.ts"
+            }
+          ]
         }
       },
       "defaultConfiguration": "production"
@@ -101,6 +113,18 @@
         "staticFilePath": "dist/apps/frontend/browser",
         "spa": true
       }
+    },
+    "docker:build-image": {
+      "command": "docker build -t novaridr/open-tombola-frontend /workspaces/open-tombola/apps/frontend",
+      "dependsOn": [
+        "build"
+      ]
+    },
+    "docker:push-image": {
+      "command": "docker push novaridr/open-tombola-frontend",
+      "dependsOn": [
+        "docker:build-image"
+      ]
     }
   }
 }

@@ -3,6 +3,7 @@ import { Component, ChangeDetectionStrategy, signal, inject } from '@angular/cor
 import { form, Field, required, SchemaPathTree, min, applyEach } from '@angular/forms/signals';
 import { Router, RouterModule } from '@angular/router';
 import { Ticket, TicketOrder } from '@novarider/open-tombola/models';
+import { environment } from '../../environments/environment';
 
 function TicketSchema(item: SchemaPathTree<Ticket>) {
   required(item.weight, { message: 'Gewicht ist erforderlich' });
@@ -52,7 +53,8 @@ export class RegisterComponent {
     event.preventDefault();
 
     if (this.registerForm().valid()) {
-      this.httpClient.post<{ paymentUrl: string }>('http://localhost:3333/checkout/create', this.registerForm().value()).subscribe(async (response) => {
+      const api_url = environment.API_URL;
+      this.httpClient.post<{ paymentUrl: string }>(`${api_url}/checkout/create`, this.registerForm().value()).subscribe(async (response) => {
         window.location.href = response.paymentUrl;
       });
     } else {

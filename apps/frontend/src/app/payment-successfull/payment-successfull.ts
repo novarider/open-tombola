@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-payment-successfull',
@@ -10,13 +11,14 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class PaymentSuccessfull implements OnInit {
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
-  private httpClient = inject(HttpClient);
+  private httpClient: HttpClient = inject(HttpClient);
 
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe(params => {
       const orderId = params['orderId'];
 
-      this.httpClient.post<void>('http://localhost:3333/checkout/confirmPayment', { orderId: orderId }).subscribe(() => {
+      const api_url = environment.API_URL;
+      this.httpClient.post<void>(`${api_url}/checkout/confirmPayment`, { orderId: orderId }).subscribe(() => {
         // nothing to do here
       });
     });
