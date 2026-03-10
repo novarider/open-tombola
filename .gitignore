@@ -52,7 +52,7 @@ vitest.config.*.timestamp*
 
 playwright-report/
 
-**/.env
+**/.env*
 
 # Terraform
 terraform.tfvars
