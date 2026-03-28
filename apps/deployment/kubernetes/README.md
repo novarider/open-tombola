@@ -13,6 +13,7 @@ These files describe how open-tombola can be setup in a Kubernetes (k8s) environ
 - Backend HTTPRoute
 - Frontend HTTPRoute
 - Gateway
+- Certificate Issuer
 
 ### Gateway
 
@@ -20,11 +21,30 @@ Envoy Gateway is used to simplify http routing and implementing HTTPS
 
 To install it run following command
 
-```
+```sh
 helm install eg oci://docker.io/envoyproxy/gateway-helm --version v1.7.1 -n envoy-gateway-system --create-namespace
 ```
 
 After that it can be configured, for details see [envoy-http-routing.yaml](envoy-http-routing.yml)
+
+### Certificate Issuer
+
+We are using cert-manager as certificate issuer to do heavy lifting on cert deploying/renewal.
+
+To install this command had been used
+
+```sh
+helm repo add jetstack https://charts.jetstack.io
+helm install \
+  cert-manager jetstack/cert-manager \
+  --version v1.17.0 \
+  --create-namespace --namespace cert-manager \
+  --set config.apiVersion="controller.config.cert-manager.io/v1alpha1" \
+  --set config.kind="ControllerConfiguration" \
+  --set config.enableGatewayAPI=true
+```
+
+Configuration is located in [cert-manager.yml](cert-manager.yml)
 
 ## Secret Files
 
