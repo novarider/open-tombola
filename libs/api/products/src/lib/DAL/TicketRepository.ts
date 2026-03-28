@@ -25,4 +25,20 @@ export class TicketRepository implements ITicketRepository {
     public async getTicketsForOrder(orderId: string): Promise<TicketDBO[]> {
         return await this.dbConnection.dbOpenTombola.manyOrNone<TicketDBO>("SELECT * FROM tickets WHERE fk_orderid = $1", [orderId]);
     }
+
+    public async createOfflineTicketCodes(codes: string[]): Promise<void> {
+        try {
+            await this.dbConnection.dbOpenTombola.tx(async (tx) => {
+                for (const code of codes) {
+                    await tx.none("INSERT INTO offlineTicketCodes (code, used) VALUES ($1, $2)", [code, false]);
+                }
+            });
+        } catch (error) {
+            console.error("Error creating new ticket codes:", error);
+        }
+    }
+
+    public async getAvailbleOfflineTicketCodes(): Promise<string[]> {
+        return await this.dbConnection.dbOpenTombola.manyOrNone<string>("SELECT code FROM offlineTicketCodes WHERE used = false");
+    }
 }

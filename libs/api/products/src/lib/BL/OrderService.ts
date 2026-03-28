@@ -8,6 +8,7 @@ import { v7 as uuid } from "uuid";
 import { TicketRepository } from "../DAL/TicketRepository";
 import { ICheckoutsRepository } from '../DAL/ICheckoutsRepository';
 import { CheckoutRepository } from '../DAL/CheckoutRepository';
+import { STRIPE_API_KEY, STRIPE_PRICE_ID, FRONTEND_BASE_URL } from '../env';
 
 @Service()
 export class OrderService {
@@ -20,7 +21,9 @@ export class OrderService {
     @Inject(() => CheckoutRepository)
     private checkoutsRepository: ICheckoutsRepository;
 
-    private stripe = new Stripe(Container.get('stripe-api-key'));
+    private stripe = new Stripe(Container.get(STRIPE_API_KEY));
+    private ticketPriceId: string = Container.get(STRIPE_PRICE_ID);
+    private baseUrl: string = Container.get(FRONTEND_BASE_URL);
 
     public async saveOrder(ticktetOrder: TicketOrder): Promise<OrderDBO> {
         const order = await this.orderRepository.saveOrder({
@@ -65,12 +68,14 @@ export class OrderService {
     public async createPaymentSession(amount: number, orderId: string): Promise<Stripe.Response<Stripe.Checkout.Session>> {
         return await this.stripe.checkout.sessions.create({
             line_items: [{
-                price: 'price_1Svi0kA2DLsR0rymvypQGdBZ',
+                // todo add env variable for stripe ticket product price id
+                price: this.ticketPriceId,
                 quantity: amount,
             }],
             mode: 'payment',
-            success_url: `http://localhost:4200/checkout/success?orderId=${orderId}`,
-            cancel_url: 'http://localhost:4200/checkout/cancel',
+            // todo add env variable for frontend base url
+            success_url: `${this.baseUrl}/checkout/success?orderId=${orderId}`,
+            cancel_url: `${this.baseUrl}/checkout/cancel`,
         });
     }
 }

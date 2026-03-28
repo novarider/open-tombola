@@ -86,7 +86,7 @@ import { Product } from '@org/models';
       background: rgba(0, 0, 0, 0.7);
       color: white;
       padding: 8px 16px;
-      border-radius: 4px;
+      border-radius: var(--border-radius-small);
       font-weight: bold;
     }
 

@@ -52,7 +52,7 @@ import { CommonModule } from '@angular/common';
       color: white;
       border: none;
       padding: 12px 24px;
-      border-radius: 4px;
+      border-radius: var(--border-radius-small);
       font-size: 1rem;
       cursor: pointer;
       transition: background 0.3s ease;

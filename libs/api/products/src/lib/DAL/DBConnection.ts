@@ -1,19 +1,20 @@
 import { Inject, Service } from "typedi";
 import pgpromise = require('pg-promise');
+import { DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD } from "../env";
 
 
 @Service()
 export class DBConnection {
-    @Inject("db-host")
+    @Inject(DB_HOST)
     private dbHost!: string;
 
-    @Inject("db-port")
+    @Inject(DB_PORT)
     private dbPort!: string;
 
-    @Inject("db-username")
+    @Inject(DB_USERNAME)
     private dbUsername!: string;
 
-    @Inject("db-password")
+    @Inject(DB_PASSWORD)
     private dbPassword!: string;
 
     private pgp = pgpromise({});
@@ -72,12 +73,21 @@ export class DBConnection {
         console.log(`Table checkouts ready to use.`);
     }
 
+    private async createOfflineTicketsTableIfNotExists(): Promise<void> {
+        await this.dbOpenTombola.any(`CREATE TABLE IF NOT EXISTS offlineTicketCodes (
+                code varchar(6) primary key,
+                used boolean
+            );`);
+        console.log(`Table offlineTicketCodes ready to use.`);
+    }
+
     public async prepareOpenTombolaDB() {
         // todo check if order table exists, if not create it
         await this.createDBIfNotExists();
         await this.createOrdersTableIfNotExists();
         await this.createTicketsTableIfNotExists();
         await this.createCheckoutsTableIfNotExists();
+        await this.createOfflineTicketsTableIfNotExists();
     }
 
     public close() {

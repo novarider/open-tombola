@@ -1,6 +1,6 @@
 import { Ticket } from "./ticket.model";
 
-export interface TicketOrder {
+export interface TicketOrderBase {
   firstName: string;
   lastName: string;
 
@@ -9,8 +9,14 @@ export interface TicketOrder {
   postalCode: string;
   city: string;
   country: string;
+}
 
+export interface TicketOrder extends TicketOrderBase {
   tickets: Ticket[];
+}
+
+export interface ActivationOrder extends TicketOrderBase {
+  activationCodes: string[];
 }
 
 export interface OrderDBO {
