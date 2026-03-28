@@ -2,14 +2,14 @@ import { Inject, Service } from "typedi";
 import { Application } from "express-serve-static-core";
 import { AppMiddleware } from "./AppMiddleware";
 import { AppHeaders } from "./AppHeaders";
-import { RootController, CheckoutController, TicketController, DBConnection } from "@org/api/products";
+import { RootController, CheckoutController, TicketController, DBConnection, HOST, PORT } from "@org/api/products";
 
 @Service()
 export class App {
-    @Inject('host')
+    @Inject(HOST)
     private host: string;
 
-    @Inject('port')
+    @Inject(PORT)
     private port: number;
 
     @Inject('app')

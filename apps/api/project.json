@@ -3,7 +3,9 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/api/src",
   "projectType": "application",
-  "tags": ["scope:api"],
+  "tags": [
+    "scope:api"
+  ],
   "release": {
     "docker": {
       "repositoryName": "org/angular-template-api"
@@ -12,16 +14,22 @@
   "targets": {
     "build": {
       "executor": "@nx/esbuild:esbuild",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "defaultConfiguration": "production",
       "options": {
         "platform": "node",
         "outputPath": "apps/api/dist",
-        "format": ["cjs"],
+        "format": [
+          "cjs"
+        ],
         "bundle": false,
         "main": "apps/api/src/main.ts",
         "tsConfig": "apps/api/tsconfig.app.json",
-        "assets": ["apps/api/src/assets"],
+        "assets": [
+          "apps/api/src/assets"
+        ],
         "generatePackageJson": true,
         "esbuildOptions": {
           "sourcemap": true,
@@ -41,13 +49,18 @@
             }
           }
         }
-      }
+      },
+      "dependsOn": [
+        "build-deps"
+      ]
     },
     "serve": {
       "continuous": true,
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
-      "dependsOn": ["build"],
+      "dependsOn": [
+        "build"
+      ],
       "options": {
         "buildTarget": "api:build",
         "runBuildTargetDependencies": false
@@ -67,7 +80,21 @@
       }
     },
     "docker:build": {
-      "dependsOn": ["build"]
+      "dependsOn": [
+        "build"
+      ]
+    },
+    "docker:build-image": {
+      "command": "docker build -t novaridr/open-tombola-api /workspaces/open-tombola/apps/api",
+      "dependsOn": [
+        "build"
+      ]
+    },
+    "docker:push-image": {
+      "command": "docker push novaridr/open-tombola-api",
+      "dependsOn": [
+        "docker:build-image"
+      ]
     }
   }
 }

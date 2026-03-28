@@ -1,6 +1,6 @@
 # Multi-stage build for Tombola API
 # Build stage
-FROM node:lts-alpine
+FROM node:lts-alpine as builder
 
 WORKDIR /app
 
