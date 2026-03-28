@@ -6,7 +6,7 @@ apiVersion: gateway.networking.k8s.io/v1
 metadata:
   name: eg
   labels:
-    application: open-tombola 
+    application: open-tombola
 spec:
   controllerName: gateway.envoyproxy.io/gatewayclass-controller
 ---
@@ -15,7 +15,7 @@ kind: Gateway
 metadata:
   name: open-tombola-gateway
   labels:
-    application: open-tombola 
+    application: open-tombola
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
 spec:
@@ -31,8 +31,8 @@ spec:
       tls:
         mode: Terminate
         certificateRefs:
-        - kind: Secret
-          name: eg-https-api
+          - kind: Secret
+            name: eg-https-api
     - name: https-frontend
       protocol: HTTPS
       hostname: "test.80-jahre-bergrettung.at"
@@ -40,30 +40,30 @@ spec:
       tls:
         mode: Terminate
         certificateRefs:
-        - kind: Secret
-          name: eg-https-frontend
+          - kind: Secret
+            name: eg-https-frontend
 ---
-# apiVersion: gateway.networking.k8s.io/v1
-# kind: HTTPRoute
-# metadata:
-#   name: tls-redirect
-# spec:
-#   parentRefs:
-#     - name: open-tombola-gateway
-#       sectionName: http
-#   rules:
-#     - filters:
-#         - type: RequestRedirect
-#           requestRedirect:
-#             scheme: https
-#             statusCode: 301
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: tls-redirect
+spec:
+  parentRefs:
+    - name: open-tombola-gateway
+      sectionName: http
+  rules:
+    - filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            statusCode: 301
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: api-route
   labels:
-    application: open-tombola 
+    application: open-tombola
 spec:
   parentRefs:
     - name: open-tombola-gateway
@@ -80,7 +80,7 @@ kind: HTTPRoute
 metadata:
   name: frontend-route
   labels:
-    application: open-tombola 
+    application: open-tombola
 spec:
   parentRefs:
     - name: open-tombola-gateway

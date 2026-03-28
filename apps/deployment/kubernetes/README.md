@@ -38,7 +38,7 @@ helm repo add jetstack https://charts.jetstack.io
 helm install \
   cert-manager jetstack/cert-manager \
   --version v1.17.0 \
-  --create-namespace --namespace cert-manager \
+  --namespace open-tombola \
   --set config.apiVersion="controller.config.cert-manager.io/v1alpha1" \
   --set config.kind="ControllerConfiguration" \
   --set config.enableGatewayAPI=true
