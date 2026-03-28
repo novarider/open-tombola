@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: open-tombola-frontend
-          image: nginx
+          image: novaridr/open-tombola-frontend
           ports:
             - containerPort: 80

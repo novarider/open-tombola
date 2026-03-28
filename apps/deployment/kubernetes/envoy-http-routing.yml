@@ -1,0 +1,56 @@
+# This file contains the base resources that the docs/user/HTTP_ROUTING.md guide relies on.
+# This includes a GatewayClass, Gateway, Services and Deployments that are used as backends
+# for routing traffic.
+kind: GatewayClass
+apiVersion: gateway.networking.k8s.io/v1
+metadata:
+  name: eg
+  labels:
+    application: open-tombola 
+spec:
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: open-tombola-gateway
+  labels:
+    application: open-tombola 
+spec:
+  gatewayClassName: eg
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: api-route
+  labels:
+    application: open-tombola 
+spec:
+  parentRefs:
+    - name: open-tombola-gateway
+  hostnames:
+    - "api.80-jahre-bergrettung.at"
+  rules:
+    - backendRefs:
+        - name: open-tombola-service
+          port: 80
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: frontend-route
+  labels:
+    application: open-tombola 
+spec:
+  parentRefs:
+    - name: open-tombola-gateway
+  hostnames:
+    - "test.80-jahre-bergrettung.at"
+  rules:
+    - backendRefs:
+        - name: open-tombola-load-balancer
+          port: 80

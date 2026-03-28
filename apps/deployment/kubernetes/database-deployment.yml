@@ -15,7 +15,10 @@ spec:
         app: open-tombola-database
     spec:
       containers:
-      - name: open-tombola-database
-        image: postgres
-        ports:
-        - containerPort: 5432
+        - name: open-tombola-database
+          image: postgres
+          envFrom:
+          - secretRef:
+              name: env-database
+          ports:
+            - containerPort: 5432
