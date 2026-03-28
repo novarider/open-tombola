@@ -42,14 +42,23 @@ scan qr code --> register form --> backend checks validity --> entry successfull
 telefonnummer dazua
 zahlengenerator für auslosung
 serienbrief für gedruckte lose
-domain lösen www.80-jahre-st-gallenkirch.at
-24. Oktober festdatum
-17. Oktober 12:00 Stichtag für Anmeldungen
+[done] domain lösen www.80-jahre-st-gallenkirch.at
+[done] 24. Oktober festdatum
+[done] 17. Oktober 12:00 Stichtag für Anmeldungen
+
+formular page
+  [done] Stückpreise updaten (2,50€)
+  delete icon has strange shadown on android
+  QR Code scanner lib https://github.com/zxing-js/ngx-scanner/wiki/Getting-Started#usage
+
 
 ## Deployment
 
-- Deployment must happen on IONOS Cloud hosted in Europe/Frankfurt am Main
-- A PostgresSQL Database as SaaS will be used, this includes DB backups
-- A Kubernetescluster will handle the api and frontend as nodes
-- A docker registry is needed for the cluster to fetch images
+- [done] Deployment must happen on OVHCloud hosted in germany
+- [done] A PostgresSQL Database in k8s will be used
+- [done] A Kubernetescluster will handle the api and frontend as nodes
+- [done] A docker registry is needed for the cluster to fetch images
 - The webpage should be reachable under https://80-jahre-bergrettung.at
+- configure PostgresSQL Database backups
+- configure http to https rerouting in nginx for frontend
+- configure https proxy to encrypt backend traffic
