@@ -20,8 +20,15 @@
   margin: 0 auto;
   padding: 0 24px;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
+
+  flex-direction: column;
+
+  @media (min-width: 900px) {
+    flex-direction: row;
+  }
 }
 
 .app-header h1 {
@@ -33,6 +40,11 @@
 .app-header nav {
   display: flex;
   gap: 24px;
+  flex-direction: column;
+
+  @media (min-width: 900px) {
+    flex-direction: row;
+  }
 }
 
 .app-header nav a {
@@ -40,7 +52,7 @@
   text-decoration: none;
   font-size: 1rem;
   padding: 8px 16px;
-  border-radius: 4px;
+  border-radius: var(--border-radius-small);
   transition: background 0.3s;
 }
 
@@ -56,7 +68,7 @@
   background: var(--background-color);
   grid-row: 2;
 
-  grid-column: 1 / 9;
+  grid-column: 2 / 7;
 
   @media (min-width: 600px) {
     grid-column: 2 / 8;

@@ -35,7 +35,7 @@
 .ticket {
     border: 1px solid #ccc;
     padding: .5rem;
-    border-radius: 4px;
+    border-radius: var(--border-radius-small);
 
     display: grid;
     grid-template-rows: min-content auto;
@@ -81,7 +81,7 @@
 .button {
     appearance: none;
     border: none;
-    border-radius: 4px;
+    border-radius: var(--border-radius-small);
     background-color: var(--primary-color);
     box-shadow: inset;
     padding: 1rem 1rem;

@@ -49,7 +49,7 @@
         <input id="country" type="text" [field]="registerForm.country" />
     </div>
 
-    <p>Wie viele Lose möchten Sie kaufen? (Stückpreis 5€)</p>
+    <p>Wie viele Lose möchten Sie kaufen? (Stückpreis 2,50€)</p>
     <div class="tickets-container">
         @for (ticket of registerForm.tickets; let i = $index; track i) {
         <div class="ticket" tabindex="0" (click)="focusInput($event)" (keypress)="focusInput($event)">
@@ -64,8 +64,8 @@
 
     <div class="add-ticket-buttons">
         <button type="button" class="button secondary" (click)="addTickets()">1 Los hinzufügen</button>
-        <button type="button" class="button secondary" (click)="addTickets(10)">10 Lose hinzufügen</button>
-        <button type="button" class="button secondary" (click)="addTickets(20)">20 Lose hinzufügen</button>
+        <button type="button" class="button secondary" (click)="addTickets(10)">10 Lose hinzufügen (25,00€)</button>
+        <button type="button" class="button secondary" (click)="addTickets(20)">20 Lose hinzufügen (50,00€)</button>
     </div>
 
     <div class="submit-button-wrapper">
