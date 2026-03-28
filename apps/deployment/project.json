@@ -4,96 +4,32 @@
   "projectType": "application",
   "sourceRoot": "apps/deployment/src",
   "targets": {
-    "plan": {
-      "executor": "@nx-extend/terraform:plan",
-      "options": {
-        "planFile": "defaultplan",
-        "ciMode": true
-      }
-    },
-    "initialize": {
-      "executor": "@nx-extend/terraform:init",
-      "options": {
-        "ciMode": true,
-        "upgrade": false,
-        "migrateState": false
-      }
-    },
-    "providers": {
-      "executor": "@nx-extend/terraform:providers",
-      "options": {
-        "ciMode": true,
-        "lock": true
-      }
-    },
-    "fmt": {
-      "executor": "@nx-extend/terraform:fmt",
-      "options": {
-        "ciMode": true,
-        "formatWrite": false
-      }
-    },
-    "apply": {
-      "executor": "@nx-extend/terraform:apply",
-      "options": {
-        "planFile": "defaultplan",
-        "ciMode": true,
-        "autoApproval": false
-      }
-    },
-    "destroy": {
-      "executor": "@nx-extend/terraform:destroy",
-      "options": {
-        "ciMode": true,
-        "autoApproval": false
-      }
-    },
-    "validate": {
-      "executor": "@nx-extend/terraform:validate",
-      "options": {
-        "ciMode": true
-      }
-    },
-    "test": {
-      "executor": "@nx-extend/terraform:test",
-      "options": {
-        "ciMode": true
-      }
-    },
-    "workspace": {
-      "executor": "@nx-extend/terraform:workspace",
-      "options": {
-        "ciMode": true,
-        "workspace": "default",
-        "workspaceAction": "select"
-      }
-    },
     "k8s-api-deployment-apply": {
-      "command": "kubectl apply -f apps/deployment/kubernetes/api-deployment.yml -n open-tombola"
+      "command": "kubectl apply -f apps/deployment/src/api-deployment.yml -n open-tombola"
     },
     "k8s-api-deployment-delete": {
       "command": "kubectl delete deployments open-tombola-api-deployment -n open-tombola"
     },
     "k8s-api-secret-create": {
-      "command": "kubectl create secret generic env-api --from-env-file apps/deployment/kubernetes/.env.api -n open-tombola"
+      "command": "kubectl create secret generic env-api --from-env-file apps/deployment/src/.env.api -n open-tombola"
     },
     "k8s-api-service-apply": {
-      "command": "kubectl apply -f apps/deployment/kubernetes/api-service.yml -n open-tombola"
+      "command": "kubectl apply -f apps/deployment/src/api-service.yml -n open-tombola"
     },
     "k8s-api-service-delete": {
-      "command": "kubectl delete -f apps/deployment/kubernetes/api-service.yml -n open-tombola"
+      "command": "kubectl delete -f apps/deployment/src/api-service.yml -n open-tombola"
     },
     "k8s-database-deployment-apply": {
-      "command": "kubectl apply -f apps/deployment/kubernetes/database-deployment.yml -n open-tombola"
+      "command": "kubectl apply -f apps/deployment/src/database-deployment.yml -n open-tombola"
     },
     "k8s-database-deployment-delete": {
       "command": "kubectl delete deployments open-tombola-database-deployment -n open-tombola"
     },
     "k8s-database-service-apply": {
-      "command": "kubectl apply -f apps/deployment/kubernetes/database-service.yml -n open-tombola"
+      "command": "kubectl apply -f apps/deployment/src/database-service.yml -n open-tombola"
     },
     "k8s-database-secret-create": {
-      "command": "kubectl create secret generic env-database --from-env-file apps/deployment/kubernetes/.env.database -n open-tombola"
+      "command": "kubectl create secret generic env-database --from-env-file apps/deployment/src/.env.database -n open-tombola"
     },
     "k8s-get-services": {
       "command": "kubectl get services -n open-tombola"
@@ -102,10 +38,10 @@
       "command": "kubectl delete deployments open-tombola-frontend-deployment -n open-tombola"
     },
     "k8s-frontend-deployment-apply": {
-      "command": "kubectl apply -f apps/deployment/kubernetes/frontend-deployment.yml -n open-tombola"
+      "command": "kubectl apply -f apps/deployment/src/frontend-deployment.yml -n open-tombola"
     },
     "k8s-frontend-service-apply": {
-      "command": "kubectl apply -f apps/deployment/kubernetes/frontend-load-balancer.yml -n open-tombola"
+      "command": "kubectl apply -f apps/deployment/src/frontend-load-balancer.yml -n open-tombola"
     },
     "k8s-namespace-create": {
       "command": "kubectl create ns open-tombola"

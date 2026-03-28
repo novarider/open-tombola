@@ -1,171 +1,74 @@
-# Deployment Guide for Tombola Application to Ionos Cloud
+# Open-tombola Kubernetes Setup files
 
-This guide provides step-by-step instructions for deploying the Tombola application to Ionos Cloud using Terraform and Docker.
+These files describe how open-tombola can be setup in a Kubernetes (k8s) environment.
 
-## Prerequisites
+## Components
 
-1. **Ionos Cloud Account**: Create an account at https://www.ionos.com/hosting/cloud-hosting
-2. **Ionos API Credentials**: Generate API credentials from your Ionos Cloud dashboard
-3. **Terraform**: Version 1.0 or higher installed locally
-4. **Docker**: For local testing and building images
-5. **Git**: For version control
-6. **SSH Keys**: For accessing deployed VMs
+- Database Deployment
+- Backend Deployment
+- Frontend Deployment
+- Database Service
+- Backend Service
+- Frontend Service
+- Backend HTTPRoute
+- Frontend HTTPRoute
+- Gateway
+- Certificate Issuer
 
-## Architecture Overview
+### Gateway
 
-The deployment creates the following infrastructure on Ionos Cloud:
+Envoy Gateway is used to simplify http routing and implementing HTTPS
 
-```
-┌─────────────────────────────────────────┐
-│       Public Internet                   │
-├─────────────────────────────────────────┤
-│   Frontend Server (Ubuntu VM)           │
-│   - Angular Frontend                    │
-│   - Nginx Reverse Proxy                 │
-│   - Static File Serving                 │
-├─────────────────────────────────────────┤
-│   Private LAN (tombola-lan)             │
-├─────────────────────────────────────────┤
-│   API Server (Ubuntu VM)                │
-│   - Node.js/Express API                 │
-│   - Docker Container                    │
-│   - Database Client                     │
-├─────────────────────────────────────────┤
-│   S3 Object Storage                     │
-│   - Backup Storage                      │
-│   - Static Assets                       │
-│   - File Storage                        │
-└─────────────────────────────────────────┘
+To install it run following command
+
+```sh
+helm install eg oci://docker.io/envoyproxy/gateway-helm --version v1.7.1 -n envoy-gateway-system --create-namespace
 ```
 
-## Quick Start
+After that it can be configured, for details see [envoy-http-routing.yaml](envoy-http-routing.yml)
 
-### 1. Configure Terraform
+### Certificate Issuer
 
-```bash
-cd apps/deployment/src
-cp terraform.tfvars.example terraform.tfvars
-# Edit terraform.tfvars with your Ionos Cloud credentials
+We are using cert-manager as certificate issuer to do heavy lifting on cert deploying/renewal.
+
+To install this command had been used
+
+```sh
+helm repo add jetstack https://charts.jetstack.io
+helm install \
+  cert-manager jetstack/cert-manager \
+  --version v1.17.0 \
+  --namespace open-tombola \
+  --set config.apiVersion="controller.config.cert-manager.io/v1alpha1" \
+  --set config.kind="ControllerConfiguration" \
+  --set config.enableGatewayAPI=true
 ```
 
-### 2. Initialize Infrastructure
+Configuration is located in [cert-manager.yml](cert-manager.yml)
 
-```bash
-nx initialize deployment
-nx plan deployment
+## Secret Files
+
+These two file are not part of the repository to prevent disclosure. Create them with following templates
+
+### [.env.api](.env.api)
+
+```env
+NODE_ENV=           # node environment
+HOST=               # IP to serve API on
+PORT=               # Port to serve API on
+API_KEY_STRIPE=     # Stripe API Key
+DB_HOST=            # DB Hostname
+DB_PORT=            # DB Port
+DB_USERNAME=        # DB Username
+DB_PASSWORD=        # DB Password
+STRIPE_PRICE_ID=    # Stripe ticket product id
+FRONTEND_BASE_URL=  # Frontendbase URL (needed for redirects)
 ```
 
-### 3. Deploy Infrastructure
+### [.env.database](.env.database)
 
-```bash
-nx apply deployment
+```env
+POSTGRES_USER=      # DB Username
+POSTGRES_PASSWORD=  # DB Password
+POSTGRES_DB=        # Open tombola DB name
 ```
-
-### 4. Build Applications
-
-```bash
-nx build api --configuration=production
-nx build frontend --configuration=production
-```
-
-### 5. Deploy to VMs
-
-```bash
-# Use the provided scripts
-bash apps/deployment/src/post-deploy.sh
-```
-
-## Detailed Documentation
-
-See the inline comments in:
-- `main.tf` - Infrastructure definition
-- `variables.tf` - Configuration variables
-- `outputs.tf` - Output values
-- `deploy.sh` - Deployment automation
-- `post-deploy.sh` - Post-deployment configuration
-
-## Terraform Targets
-
-```bash
-# Initialize Terraform
-nx initialize deployment
-
-# Check formatting
-nx fmt deployment
-
-# Plan changes
-nx plan deployment
-
-# Apply changes
-nx apply deployment
-
-# Destroy infrastructure (be careful!)
-nx destroy deployment
-```
-
-## Common Tasks
-
-```bash
-# View deployment outputs
-terraform output
-
-# Refresh state from cloud
-terraform refresh
-
-# See full output details
-terraform output -json | jq
-
-# SSH into servers
-ssh root@<api-ip>
-ssh root@<frontend-ip>
-```
-
-## Environment Variables
-
-Set these on your deployed servers:
-
-**API Server** (`.env` or via systemd):
-```
-HOST=0.0.0.0
-PORT=3333
-NODE_ENV=production
-DATABASE_URL=postgresql://user:password@localhost:5432/tombola
-STRIPE_API_KEY=your-stripe-key
-```
-
-**Frontend Server**:
-```
-API_URL=http://api.your-domain.com:3333
-```
-
-## Security Notes
-
-⚠️ **Important Security Considerations**:
-
-1. **Never commit** `terraform.tfvars` - it contains credentials
-2. **Rotate** Ionos Cloud credentials regularly
-3. **Use** strong root passwords for VMs
-4. **Enable** SSL/TLS with Let's Encrypt
-5. **Configure** firewall rules appropriately
-6. **Use** SSH keys instead of password authentication
-7. **Monitor** all deployed resources
-8. **Backup** database regularly to S3
-
-## Versioning
-
-- Terraform: >= 1.0
-- Ionos Cloud Provider: ~> 7.0
-- Ubuntu: 22.04 LTS
-
-## Support
-
-For issues:
-1. Check Ionos Cloud Dashboard for resource status
-2. Review Terraform state: `terraform state list`
-3. Check VM logs via SSH
-4. Review application logs in `/var/log/` or Docker logs
-
----
-
-**Setup**: First-time deployment to Ionos Cloud via Terraform
-**Last Updated**: 2026-02-28
