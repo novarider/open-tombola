@@ -2,4 +2,4 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 npm ci
-nx run-many -t lint build
+nx run-many -t lint typecheck test build
