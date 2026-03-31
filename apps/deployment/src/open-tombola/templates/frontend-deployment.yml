@@ -1,18 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: open-tombola-frontend-deployment
+  name: {{ .Release.Name }}-frontend-deployment
   labels:
-    app: open-tombola-frontend
+    app: {{ .Release.Name }}-frontend
+  namespace: {{ .Values.namespace }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: open-tombola-frontend
+      app: {{ .Release.Name }}-frontend
   template:
     metadata:
       labels:
-        app: open-tombola-frontend
+        app: {{ .Release.Name }}-frontend
     spec:
       containers:
         - name: open-tombola-frontend

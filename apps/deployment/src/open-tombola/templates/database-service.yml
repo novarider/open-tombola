@@ -1,9 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: open-tombola-database-service
+  name: {{ .Release.Name }}-database-service
   labels:
-    app: open-tombola-database
+    app: {{ .Release.Name }}-database
+  namespace: {{ .Values.namespace }}
 spec:
   type: NodePort
   ports:
@@ -13,4 +14,4 @@ spec:
       name: postgres
   internalTrafficPolicy: Local
   selector:
-    app: open-tombola-database
+    app: {{ .Release.Name }}-database

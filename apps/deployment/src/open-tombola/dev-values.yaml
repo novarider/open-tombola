@@ -1,0 +1,9 @@
+namespace: open-tombola-dev
+
+frontendHostname: test.80-jahre-bergrettung.localhost
+frontendUrl: https://test.80-jahre-bergrettung.localhost
+
+backendHostname: api.test.80-jahre-bergrettung.localhost
+backendUrl: https://api.test.80-jahre-bergrettung.localhost
+
+sslsource: selfSigned

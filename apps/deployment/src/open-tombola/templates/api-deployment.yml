@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-api-deployment
+  labels:
+    app: {{ .Release.Name }}-api
+  namespace: {{ .Values.namespace }} 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-api
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-api
+    spec:
+      containers:
+        - name: open-tombola-api
+          image: novaridr/open-tombola-api
+          envFrom:
+            - secretRef:
+                name: env-api
+          # env:
+          #   - name: FRONTEND_BASE_URL 
+          #     value: {{ .Values.frontendUrl }}
+          ports:
+            - containerPort: 3333

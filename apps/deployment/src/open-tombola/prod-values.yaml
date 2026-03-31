@@ -1,0 +1,9 @@
+namespace: open-tombola-prod
+
+frontendHostname: 80-jahre-bergrettung.at
+frontendUrl: https://80-jahre-bergrettung.at
+
+backendHostname: api.80-jahre-bergrettung.at
+backendUrl: https://api.80-jahre-bergrettung.at
+
+sslsource: letsencrypt

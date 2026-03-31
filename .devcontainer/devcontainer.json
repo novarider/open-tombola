@@ -7,7 +7,7 @@
 		"dockerfile": "./Dockerfile"
 	},
 	"containerEnv": {
-		"KUBECONFIG": "/home/open-tombola/scripts/k8s/kubeconfig-cz2nls.yml"
+		"KUBECONFIG": "/home/open-tombola/.kube/config:/home/open-tombola/scripts/k8s/kubeconfig-cz2nls.yml"
 	},
 	"features": {
 		"ghcr.io/devcontainers/features/common-utils": {
@@ -35,6 +35,7 @@
 	},
 	"mounts": [
 		"source=${localEnv:HOME}/.ssh,target=/home/open-tombola/.ssh,type=bind,consistency=cached",
+		"source=${localEnv:HOME}/.kube,target=/home/open-tombola/.kube,type=bind,consistency=cached",
 		"source=${localEnv:HOME}/scripts,target=/home/open-tombola/scripts,type=bind,consistency=cached"
 	],
 	// Features to add to the dev container. More info: https://containers.dev/features.

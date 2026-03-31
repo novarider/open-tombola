@@ -1,9 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: open-tombola-service
+  name: {{ .Release.Name }}-service
   labels:
-    app: open-tombola-service
+    app: {{ .Release.Name }}-service
+  namespace: {{ .Values.namespace }} 
 spec:
   ports:
     - port: 80
@@ -11,4 +12,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app: open-tombola-api
+    app: {{ .Release.Name }}-api

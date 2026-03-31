@@ -1,0 +1,18 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt
+spec:
+  {{ if eq .Values.sslsource "selfSigned" }}selfSigned: {}{{ end }}
+  {{ if eq .Values.sslsource "letsencrypt" }}acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: pat.rudigier@gmail.com
+    privateKeySecretRef:
+      name: letsencrypt-account-key
+    solvers:
+      - http01:
+          gatewayHTTPRoute:
+            parentRefs:
+              - kind: Gateway
+                name: {{ .Release.Name }}-gateway
+                namespace: {{ .Values.namespace }}{{ end }}

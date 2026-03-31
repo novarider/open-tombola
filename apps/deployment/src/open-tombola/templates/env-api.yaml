@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: env-api
+  namespace: {{ .Values.namespace }}
+type: Opaque
+stringData:
+  {{- range $key, $value := .Files.Get ".env.api" | split "\n" }}
+  {{- if and $value (not (hasPrefix "#" $value)) }}
+  {{- $parts := split "=" $value }}
+  {{- if eq (len $parts) 2 }}
+  {{ trim $parts._0 }}: {{ trim $parts._1 | quote }}
+  {{- end }}
+  {{- end }}
+  {{- end }} 
