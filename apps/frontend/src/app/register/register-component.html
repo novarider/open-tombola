@@ -4,7 +4,7 @@
         <div class="form-group">
             @let formField = registerForm.firstName;
             <label for="firstName">Vorname</label>
-            <input id="firstName" type="text" [field]="formField" />
+            <input id="firstName" type="text" [field]="formField" data-testid="input-firstName" />
             @if (formField().invalid() &&
             formField().touched()
             ) {
@@ -22,31 +22,35 @@
             <span>{{error.message}}</span>
             }
             }
-            <input id="lastName" type="text" [field]="registerForm.lastName" />
+            <input id="lastName" type="text" [field]="registerForm.lastName" data-testid="input-lastName" />
         </div>
     </div>
 
     <div class="form-group">
         <label for="street">Straße und Hausnummer</label>
-        <input id="street" type="text" [field]="registerForm.street" />
+        <input id="street" type="text" [field]="registerForm.street" data-testid="input-street" />
     </div>
     <div class="form-group">
         <label for="addressLine2">Adresszeile 2</label>
-        <input id="addressLine2" type="text" [field]="registerForm.addressLine2" />
+        <input id="addressLine2" type="text" [field]="registerForm.addressLine2" data-testid="input-addressLine2" />
     </div>
     <div class="group">
         <div class="form-group">
             <label for="postalCode">Postleitzahl</label>
-            <input id="postalCode" type="text" [field]="registerForm.postalCode" />
+            <input id="postalCode" type="text" [field]="registerForm.postalCode" data-testid="input-postalCode" />
         </div>
         <div class="form-group">
             <label for="city">Wohnort</label>
-            <input id="city" type="text" [field]="registerForm.city" />
+            <input id="city" type="text" [field]="registerForm.city" data-testid="input-city" />
         </div>
     </div>
     <div class="form-group">
         <label for="country">Land</label>
-        <input id="country" type="text" [field]="registerForm.country" />
+        <input id="country" type="text" [field]="registerForm.country" data-testid="input-country" />
+    </div>
+    <div class="form-group">
+        <label for="country">Telefonnummer</label>
+        <input id="country" type="tel" [field]="registerForm.phonenumber" data-testid="input-phonenumber" />
     </div>
 
     <p>Wie viele Lose möchten Sie kaufen? (Stückpreis 2,50€)</p>
@@ -55,20 +59,25 @@
         <div class="ticket" tabindex="0" (click)="focusInput($event)" (keypress)="focusInput($event)">
             <div class="form-group">
                 <label [attr.for]="'weight'+i">Tipp {{i+1}}</label>
-                <input [attr.id]="'weight'+i" type="number" [field]="ticket.weight" />
+                <input [attr.id]="'weight'+i" type="number" [field]="ticket.weight"
+                    [attr.data-testid]="'input-weight-'+ i" />
             </div>
-            <button type="button" (click)="removeTicket(i, $event)">&#x1F5D1;</button>
+            <button type="button" (click)="removeTicket(i, $event)"
+                [attr.data-testid]="'remove-ticket-'+ i">&#x1F5D1;</button>
         </div>
         }
     </div>
 
     <div class="add-ticket-buttons">
-        <button type="button" class="button secondary" (click)="addTickets()">1 Los hinzufügen</button>
-        <button type="button" class="button secondary" (click)="addTickets(10)">10 Lose hinzufügen (25,00€)</button>
-        <button type="button" class="button secondary" (click)="addTickets(20)">20 Lose hinzufügen (50,00€)</button>
+        <button type="button" class="button secondary" data-testid="add-1-ticket" (click)="addTickets()">1 Los
+            hinzufügen</button>
+        <button type="button" class="button secondary" data-testid="add-10-tickets" (click)="addTickets(10)">10 Lose
+            hinzufügen (25,00€)</button>
+        <button type="button" class="button secondary" data-testid="add-20-tickets" (click)="addTickets(20)">20 Lose
+            hinzufügen (50,00€)</button>
     </div>
 
     <div class="submit-button-wrapper">
-        <button type="submit" class="button primary">Lose kaufen</button>
+        <button type="submit" class="button primary" data-testid="buy-tickets">Lose kaufen</button>
     </div>
 </form>

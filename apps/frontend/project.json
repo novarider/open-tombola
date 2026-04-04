@@ -62,6 +62,17 @@
               "with": "apps/frontend/src/environments/environment.development.ts"
             }
           ]
+        },
+        "local": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "fileReplacements": [
+            {
+              "replace": "apps/frontend/src/environments/environment.ts",
+              "with": "apps/frontend/src/environments/environment.local.ts"
+            }
+          ]
         }
       },
       "defaultConfiguration": "production"
@@ -78,9 +89,12 @@
         },
         "development": {
           "buildTarget": "frontend:build:development"
+        },
+        "local": {
+          "buildTarget": "frontend:build:local"
         }
       },
-      "defaultConfiguration": "development",
+      "defaultConfiguration": "local",
       "options": {
         "proxyConfig": "apps/frontend/proxy.conf.json",
         "host": "0.0.0.0"

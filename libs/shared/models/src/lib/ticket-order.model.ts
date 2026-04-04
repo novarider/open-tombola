@@ -9,6 +9,7 @@ export interface TicketOrderBase {
   postalCode: string;
   city: string;
   country: string;
+  phonenumber: string;
 }
 
 export interface TicketOrder extends TicketOrderBase {

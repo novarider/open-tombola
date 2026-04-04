@@ -30,6 +30,7 @@ export class RegisterComponent {
     postalCode: '',
     city: '',
     country: '',
+    phonenumber: '',
 
     tickets: [
       { weight: '' },
@@ -44,6 +45,7 @@ export class RegisterComponent {
     required(schemaPath.postalCode, { message: 'Bitte geben Sie Ihre Postleitzahl ein' });
     required(schemaPath.city, { message: 'Bitte geben Sie Ihren Wohnort ein' });
     required(schemaPath.country, { message: 'Bitte geben Sie Ihr Heimatland ein' });
+    required(schemaPath.phonenumber, { message: 'Bitte geben Sie Ihre Telefonnummer ein' });
 
     applyEach(schemaPath.tickets, TicketSchema);
   });

@@ -1,3 +1,3 @@
 export const environment = {
-    API_URL: 'http://open-tombola-api:3333',
+    API_URL: 'https://api.test.80-jahre-bergrettung.localhost',
 };

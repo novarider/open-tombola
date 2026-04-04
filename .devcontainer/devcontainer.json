@@ -23,8 +23,11 @@
 		"ghcr.io/devcontainers/features/terraform": {
 			"version": "1.9.0"
 		},
-		"ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {}
+		"ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {},
+		"ghcr.io/robbert229/devcontainer-features/postgresql-client": {},
+		"ghcr.io/devcontainers/features/desktop-lite": {}
 	},
+	"postStartCommand": "sudo bash -c 'echo \"172.24.144.1    db.test.80-jahre-bergrettung.localhost\" >> /etc/hosts'",
 	"customizations": {
 		"vscode": {
 			"extensions": [
