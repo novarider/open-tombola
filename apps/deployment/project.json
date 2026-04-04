@@ -4,6 +4,15 @@
   "projectType": "application",
   "sourceRoot": "apps/deployment/src",
   "targets": {
+    "helm-upgrade-local": {
+      "command": "helm upgrade open-tombola apps/deployment/src/open-tombola -f apps/deployment/src/open-tombola/dev-values.yaml"
+    },
+    "helm-install-local": {
+      "command": "helm install open-tombola apps/deployment/src/open-tombola -f apps/deployment/src/open-tombola/dev-values.yaml"
+    },
+    "helm-uninstall-local": {
+      "command": "helm uninstall open-tombola"
+    },
     "k8s-api-deployment-apply": {
       "command": "kubectl apply -f apps/deployment/src/api-deployment.yml -n open-tombola"
     },
