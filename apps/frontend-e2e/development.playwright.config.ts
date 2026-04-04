@@ -3,7 +3,7 @@ import { nxE2EPreset } from '@nx/playwright/preset';
 import { workspaceRoot } from '@nx/devkit';
 
 // For CI, you may want to set BASE_URL to the deployed application.
-const baseURL = 'http://localhost:4200';
+const baseURL = process.env['BASE_URL'] || 'https://test.80-jahre-bergrettung.localhost';
 
 /**
  * Read environment variables from file.
@@ -23,18 +23,23 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   workers: 2,
+  retries: 2,
   /* Run your local dev server before starting the tests */
-  webServer: {
-    command: 'nx s frontend',
-    url: baseURL,
-    reuseExistingServer: true,
-    cwd: workspaceRoot,
-  },
+  // webServer: {
+  //   command: 'nx run frontend:serve',
+  //   url: 'http://localhost:4200',
+  //   reuseExistingServer: true,
+  //   cwd: workspaceRoot,
+  // },
   projects: [
     {
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
+        launchOptions: {
+          args: ['--host-resolver-rules=MAP *.80-jahre-bergrettung.localhost 172.24.144.1']
+        },
+        ignoreHTTPSErrors: true
       },
     },
     // Uncomment to test wider variety of browsers

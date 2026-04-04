@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
         - name: open-tombola-frontend
-          image: novaridr/open-tombola-frontend
+          image: {{ .Values.frontendImageName }}
           ports:
             - containerPort: 80

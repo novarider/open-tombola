@@ -1,10 +1,12 @@
 namespace: open-tombola-dev
 
+frontendImageName: novaridr/open-tombola-frontend-development
 frontendHostname: test.80-jahre-bergrettung.localhost
 frontendUrl: https://test.80-jahre-bergrettung.localhost
 
 backendHostname: api.test.80-jahre-bergrettung.localhost
 backendUrl: https://api.test.80-jahre-bergrettung.localhost
+backendEnvFile: .env.api.development
 
 databaseHostname: db.test.80-jahre-bergrettung.localhost
 

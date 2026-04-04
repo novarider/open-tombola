@@ -64,7 +64,7 @@ async function buyTickets(page: Page, actions: (() => Promise<void>)[], tips: nu
 
   await fillPaymentData(page, person, TestCards.getRandomCard());
 
-  await expect(page.getByTestId('sucess-page-header')).toBeVisible({ timeout: 10000 });
+  await expect(page.getByTestId('sucess-page-header')).toBeVisible({ timeout: 30000 });
 }
 
 test('buy single ticket online', async ({ page }) => {

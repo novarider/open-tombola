@@ -128,17 +128,31 @@
         "spa": true
       }
     },
-    "docker:build-image": {
-      "command": "docker build -t novaridr/open-tombola-frontend /workspaces/open-tombola/apps/frontend",
+    "docker:build": {
       "dependsOn": [
         "build"
-      ]
+      ],
+      "configurations": {
+        "development": {
+          "command": "docker build -t novaridr/open-tombola-frontend-development /workspaces/open-tombola/apps/frontend"
+        },
+        "production": {
+          "command": "docker build -t novaridr/open-tombola-frontend /workspaces/open-tombola/apps/frontend"
+        }
+      }
     },
     "docker:push-image": {
-      "command": "docker push novaridr/open-tombola-frontend",
       "dependsOn": [
-        "docker:build-image"
-      ]
+        "docker:build"
+      ],
+      "configurations": {
+        "development": {
+          "command": "docker push novaridr/open-tombola-frontend-development"
+        },
+        "production": {
+          "command": "docker push novaridr/open-tombola-frontend"
+        }
+      }
     }
   }
 }

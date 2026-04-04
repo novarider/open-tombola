@@ -5,7 +5,7 @@ metadata:
   namespace: {{ .Values.namespace }}
 type: Opaque
 stringData:
-  {{- range $key, $value := .Files.Get ".env.api" | split "\n" }}
+  {{- range $key, $value := .Files.Get .Values.backendEnvFile | split "\n" }}
   {{- if and $value (not (hasPrefix "#" $value)) }}
   {{- $parts := split "=" $value }}
   {{- if eq (len $parts) 2 }}

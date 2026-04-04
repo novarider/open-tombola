@@ -21,8 +21,5 @@ spec:
           envFrom:
             - secretRef:
                 name: env-api
-          # env:
-          #   - name: FRONTEND_BASE_URL 
-          #     value: {{ .Values.frontendUrl }}
           ports:
             - containerPort: 3333

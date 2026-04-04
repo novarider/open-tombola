@@ -1,3 +1,3 @@
 export const environment = {
-    API_URL: 'http://api.80-jahre-bergrettung.at',
+    API_URL: 'https://api.80-jahre-bergrettung.at',
 };

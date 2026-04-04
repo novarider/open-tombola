@@ -1,9 +1,13 @@
 namespace: open-tombola-prod
 
+frontendImageName: novaridr/open-tombola-frontend
 frontendHostname: 80-jahre-bergrettung.at
 frontendUrl: https://80-jahre-bergrettung.at
 
 backendHostname: api.80-jahre-bergrettung.at
 backendUrl: https://api.80-jahre-bergrettung.at
+backendEnvFile: .env.api.production
+
+databaseHostname: open-tombola-database
 
 sslsource: letsencrypt
