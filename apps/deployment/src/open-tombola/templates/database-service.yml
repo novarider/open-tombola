@@ -1,17 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}-database-service
+  name: {{ .Release.Name }}-database
   labels:
     app: {{ .Release.Name }}-database
   namespace: {{ .Values.namespace }}
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
     - port: 5432
       targetPort: 5432
       protocol: TCP
       name: postgres
-  internalTrafficPolicy: Local
   selector:
     app: {{ .Release.Name }}-database
