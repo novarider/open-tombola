@@ -59,8 +59,15 @@
         <div class="ticket" tabindex="0" (click)="focusInput($event)" (keypress)="focusInput($event)">
             <div class="form-group">
                 <label [attr.for]="'weight'+i">Tipp {{i+1}}</label>
-                <input [attr.id]="'weight'+i" type="number" [field]="ticket.weight"
+                <input [attr.id]="'weight'+i" type="number" step=".001" [field]="ticket.weight"
                     [attr.data-testid]="'input-weight-'+ i" />
+                @if (ticket.weight().invalid() &&
+                ticket.weight().touched()
+                ) {
+                @for (error of ticket.weight().errors(); track error.kind) {
+                <span>{{error.message}}</span>
+                }
+                }
             </div>
             <button type="button" (click)="removeTicket(i, $event)"
                 [attr.data-testid]="'remove-ticket-'+ i">&#x1F5D1;</button>

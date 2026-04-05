@@ -54,6 +54,26 @@
 
 .ticket input {
     width: 100%;
+
+    font-family: 'Courier New', Courier, monospace;
+    text-align: right;
+    --color1: #ffffff;
+    --color2: #dddddd;
+    --spacing: 1ch;
+    background: repeating-linear-gradient(to left, var(--color1), var(--color1) var(--spacing), var(--color2) var(--spacing), var(--color2) calc(var(--spacing) * 2));
+
+    border-color: #dddddd;
+    border-radius: 4px;
+    border-style: solid;
+    box-shadow: none;
+
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.ticket input[type=number]::-webkit-inner-spin-button,
+.ticket input[type=number]::-webkit-outer-spin-button {
+    opacity: 1;
 }
 
 .ticket .form-group {

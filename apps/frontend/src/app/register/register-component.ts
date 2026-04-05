@@ -1,13 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, ChangeDetectionStrategy, signal, inject } from '@angular/core';
-import { form, Field, required, SchemaPathTree, min, applyEach } from '@angular/forms/signals';
+import { form, Field, required, SchemaPathTree, min, applyEach, pattern } from '@angular/forms/signals';
 import { Router, RouterModule } from '@angular/router';
 import { Ticket, TicketOrder } from '@novarider/open-tombola/models';
 import { environment } from '../../environments/environment';
 
 function TicketSchema(item: SchemaPathTree<Ticket>) {
-  required(item.weight, { message: 'Gewicht ist erforderlich' });
-  min(item.weight, 1, { message: 'Gewicht muss mindestens 0.001 kg sein' });
+  required(item.weight, { message: 'Ein Tipp ist erforderlich' });
+  min(item.weight, 1, { message: 'Ein Tipp muss mindestens 0.001 kg sein' });
+  pattern(item.weight, /^\d*(\.\d{0,3})?$/, { message: 'Ein Tipp darf nicht mehr als drei Dezimalstellen haben' });
 }
 
 @Component({
