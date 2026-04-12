@@ -145,6 +145,7 @@
       "dependsOn": [
         "docker:build"
       ],
+      "executor": "nx:run-commands",
       "configurations": {
         "development": {
           "command": "docker push novaridr/open-tombola-frontend-development"

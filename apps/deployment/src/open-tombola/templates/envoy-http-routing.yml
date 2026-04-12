@@ -43,6 +43,15 @@ spec:
         certificateRefs:
           - kind: Secret
             name: eg-https-frontend
+    - name: https-frontend-www
+      protocol: HTTPS
+      hostname: www.{{ .Values.frontendHostname }}
+      port: 443
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: eg-https-frontend-www
     {{ if .Values.exposeDatabase }}
     - name: database
       protocol: TCP
@@ -116,6 +125,24 @@ spec:
       sectionName: https-frontend
   hostnames:
     - {{ .Values.frontendHostname }}
+  rules:
+    - backendRefs:
+        - name: {{ .Release.Name }}-load-balancer
+          port: 80
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: frontend-www-route
+  labels:
+    application: {{ .Release.Name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  parentRefs:
+    - name: {{ .Release.Name }}-gateway
+      sectionName: https-frontend-www
+  hostnames:
+    - www.{{ .Values.frontendHostname }}
   rules:
     - backendRefs:
         - name: {{ .Release.Name }}-load-balancer

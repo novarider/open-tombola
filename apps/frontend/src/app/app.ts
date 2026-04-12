@@ -9,6 +9,4 @@ import { BRIcon } from './icon/icon';
   styleUrl: './app.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class App {
-  protected title = '80 Jahre Bergrettung St. Gallenkirch';
-}
+export class App { }
