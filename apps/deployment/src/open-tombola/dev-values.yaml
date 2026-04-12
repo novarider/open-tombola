@@ -11,3 +11,4 @@ backendEnvFile: .env.api.development
 databaseHostname: db.test.80-jahre-bergrettung.localhost
 
 sslsource: selfSigned
+exposeDatabase: true

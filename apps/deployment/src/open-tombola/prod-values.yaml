@@ -11,3 +11,4 @@ backendEnvFile: .env.api.production
 databaseHostname: open-tombola-database
 
 sslsource: letsencrypt
+exposeDatabase: false

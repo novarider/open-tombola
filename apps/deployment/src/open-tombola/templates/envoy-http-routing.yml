@@ -43,13 +43,16 @@ spec:
         certificateRefs:
           - kind: Secret
             name: eg-https-frontend
+    {{ if .Values.exposeDatabase }}
     - name: database
       protocol: TCP
       port: 5432
       allowedRoutes:
         kinds:
         - kind: TCPRoute
+    {{ end }}
 ---
+{{ if .Values.exposeDatabase }}
 apiVersion: gateway.networking.k8s.io/v1alpha2
 kind: TCPRoute
 metadata:
@@ -65,6 +68,7 @@ spec:
       name: {{ .Release.Name }}-database
       port: 5432
 ---
+{{ end }}
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:

@@ -7,6 +7,9 @@
     "helm-upgrade-local": {
       "command": "helm upgrade open-tombola apps/deployment/src/open-tombola -f apps/deployment/src/open-tombola/dev-values.yaml"
     },
+    "helm-install-envoy-gateway": {
+      "command": "helm install eg oci://docker.io/envoyproxy/gateway-helm --version v1.7.1 -n envoy-gateway-system --create-namespace"
+    },
     "helm-add-repo-jetstack": {
       "command": "helm repo add jetstack https://charts.jetstack.io"
     },
@@ -20,10 +23,22 @@
       "command": "helm uninstall cert-manager"
     },
     "helm-install-open-tombola-local": {
-      "command": "helm install open-tombola apps/deployment/src/open-tombola -f apps/deployment/src/open-tombola/dev-values.yaml",
+      "command": "helm install open-tombola apps/deployment/src/open-tombola -f apps/deployment/src/open-tombola/dev-values.yaml"
     },
-    "helm-uninstall-local": {
-      "command": "helm uninstall open-tombola",
+    "helm-install-cert-manager-production": {
+      "command": "helm install cert-manager jetstack/cert-manager --version v1.17.0 --namespace cert-manager --create-namespace --set config.apiVersion=\"controller.config.cert-manager.io/v1alpha1\" --set config.kind=\"ControllerConfiguration\" --set config.enableGatewayAPI=true",
+      "dependsOn": [
+        "helm-add-repo-jetstack"
+      ]
+    },
+    "helm-install-open-tombola-production": {
+      "command": "helm install open-tombola apps/deployment/src/open-tombola -f apps/deployment/src/open-tombola/prod-values.yaml"
+    },
+    "helm-upgrade-open-tombola-production": {
+      "command": "helm upgrade open-tombola apps/deployment/src/open-tombola -f apps/deployment/src/open-tombola/prod-values.yaml"
+    },
+    "helm-uninstall-open-tombola": {
+      "command": "helm uninstall open-tombola"
     },
     "k8s-api-deployment-apply": {
       "command": "kubectl apply -f apps/deployment/src/api-deployment.yml -n open-tombola"
