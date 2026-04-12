@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: CronJob 
+metadata:
+  name: {{ .Release.Name }}-database-backup
+  namespace: {{ .Values.namespace }}
+spec:
+  schedule: "0 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          volumes:
+          - name: backup-pv-storage
+            persistentVolumeClaim:
+              claimName: {{ .Release.Name }}-pvc-database-backup
+          containers:
+          - name: {{ .Release.Name }}-database-backup
+            image: postgres
+            command: ["bash", "-c", "pg_dump -U postgres -h {{ .Release.Name }}-database -d open_tombola > /backup/backup.sql"]
+            env:
+            - name: PGPASSWORD
+              value: password
+            volumeMounts:
+            - name: backup-pv-storage
+              mountPath: /backup
+          restartPolicy: OnFailure

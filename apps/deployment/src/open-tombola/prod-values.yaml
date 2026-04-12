@@ -12,3 +12,4 @@ databaseHostname: open-tombola-database
 
 sslsource: letsencrypt
 exposeDatabase: false
+storageClassName: csi-cinder-classic-luks
