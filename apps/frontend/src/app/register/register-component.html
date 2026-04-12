@@ -1,76 +1,120 @@
-<h1>Alpschwein Verlosung 2026</h1>
+<h2>Alpschwein Verlosung 2026</h2>
+
+<ng-template #inputTemplate let-formField="formField" let-id="id" let-label="label" let-testid="testid" let-type="type">
+    <label [attr.for]="id">{{label}}</label>
+    <input id="{{id}}" type="{{type}}" [field]="formField" [attr.data-testid]="testid" />
+    @if (formField().invalid() &&
+    formField().touched()
+    ) {
+    <div class="error">
+        @for (error of formField().errors(); track error.kind) {
+        <span>{{error.message}}</span>
+        }
+    </div>
+    }
+</ng-template>
+
 <form (submit)="onSubmit($event)">
     <div class="group">
         <div class="form-group">
-            @let formField = registerForm.firstName;
-            <label for="firstName">Vorname</label>
-            <input id="firstName" type="text" [field]="formField" data-testid="input-firstName" />
-            @if (formField().invalid() &&
-            formField().touched()
-            ) {
-            @for (error of formField().errors(); track error.kind) {
-            <span>{{error.message}}</span>
-            }
-            }
+            <ng-container *ngTemplateOutlet="inputTemplate; context: { 
+                    formField: registerForm.firstName, 
+                    id: 'firstName', 
+                    label: 'Vorname', 
+                    testid: 'input-firstName',
+                    type: 'text'
+                }"></ng-container>
         </div>
         <div class="form-group">
-            <label for="lastName">Nachname</label>
-            @if (registerForm.lastName().invalid() &&
-            registerForm.lastName().touched()
-            ) {
-            @for (error of registerForm.lastName().errors(); track error.kind) {
-            <span>{{error.message}}</span>
-            }
-            }
-            <input id="lastName" type="text" [field]="registerForm.lastName" data-testid="input-lastName" />
+            <ng-container *ngTemplateOutlet="inputTemplate; context: { 
+                    formField: registerForm.lastName, 
+                    id: 'lastName', 
+                    label: 'Nachname', 
+                    testid: 'input-lastName',
+                    type: 'text'
+                }"></ng-container>
         </div>
     </div>
 
     <div class="form-group">
-        <label for="street">Straße und Hausnummer</label>
-        <input id="street" type="text" [field]="registerForm.street" data-testid="input-street" />
+        <ng-container *ngTemplateOutlet="inputTemplate; context: { 
+                formField: registerForm.street, 
+                id: 'street', 
+                label: 'Straße und Hausnummer', 
+                testid: 'input-street',
+                type: 'text'
+            }"></ng-container>
     </div>
     <div class="form-group">
-        <label for="addressLine2">Adresszeile 2</label>
-        <input id="addressLine2" type="text" [field]="registerForm.addressLine2" data-testid="input-addressLine2" />
+        <ng-container *ngTemplateOutlet="inputTemplate; context: { 
+                formField: registerForm.addressLine2, 
+                id: 'addressLine2', 
+                label: 'Adresszeile 2', 
+                testid: 'input-addressLine2',
+                type: 'text'
+            }"></ng-container>
     </div>
     <div class="group">
         <div class="form-group">
-            <label for="postalCode">Postleitzahl</label>
-            <input id="postalCode" type="text" [field]="registerForm.postalCode" data-testid="input-postalCode" />
+            <ng-container *ngTemplateOutlet="inputTemplate; context: { 
+                formField: registerForm.postalCode, 
+                id: 'postalCode', 
+                label: 'Postleitzahl', 
+                testid: 'input-postalCode',
+                type: 'text'
+            }"></ng-container>
         </div>
         <div class="form-group">
-            <label for="city">Wohnort</label>
-            <input id="city" type="text" [field]="registerForm.city" data-testid="input-city" />
+            <ng-container *ngTemplateOutlet="inputTemplate; context: { 
+                formField: registerForm.city, 
+                id: 'city', 
+                label: 'Wohnort', 
+                testid: 'input-city',
+                type: 'text'
+            }"></ng-container>
         </div>
     </div>
     <div class="form-group">
-        <label for="country">Land</label>
-        <input id="country" type="text" [field]="registerForm.country" data-testid="input-country" />
+        <ng-container *ngTemplateOutlet="inputTemplate; context: { 
+                formField: registerForm.country, 
+                id: 'country', 
+                label: 'Land', 
+                testid: 'input-country',
+                type: 'text'
+            }"></ng-container>
     </div>
     <div class="form-group">
-        <label for="country">Telefonnummer</label>
-        <input id="country" type="tel" [field]="registerForm.phonenumber" data-testid="input-phonenumber" />
+        <ng-container *ngTemplateOutlet="inputTemplate; context: { 
+                formField: registerForm.phonenumber, 
+                id: 'phonenumber', 
+                label: 'Telefonnummer', 
+                testid: 'input-phonenumber',
+                type: 'tel'
+            }"></ng-container>
     </div>
 
-    <p>Wie viele Lose möchten Sie kaufen? (Stückpreis 2,50€)</p>
+    <h3>Wie viele Lose möchten Sie kaufen? (Stückpreis 2,50€)</h3>
     <div class="tickets-container">
         @for (ticket of registerForm.tickets; let i = $index; track i) {
-        <div class="ticket" tabindex="0" (click)="focusInput($event)" (keypress)="focusInput($event)">
-            <div class="form-group">
+        <div class="ticket-wrapper">
+            <div class="ticket" tabindex="0" (click)="focusInput($event)" (keypress)="focusInput($event)">
                 <label [attr.for]="'weight'+i">Tipp {{i+1}}</label>
                 <input [attr.id]="'weight'+i" type="number" step=".001" [field]="ticket.weight"
                     [attr.data-testid]="'input-weight-'+ i" />
+
                 @if (ticket.weight().invalid() &&
                 ticket.weight().touched()
                 ) {
-                @for (error of ticket.weight().errors(); track error.kind) {
-                <span>{{error.message}}</span>
+                <div class="error">
+                    @for (error of ticket.weight().errors(); track error.kind) {
+                    <p>{{error.message}}</p>
+                    }
+                </div>
                 }
-                }
+
+                <button type="button" class="delete-ticket" (click)="removeTicket(i, $event)"
+                    [attr.data-testid]="'remove-ticket-'+ i">&#x1F5D1;</button>
             </div>
-            <button type="button" (click)="removeTicket(i, $event)"
-                [attr.data-testid]="'remove-ticket-'+ i">&#x1F5D1;</button>
         </div>
         }
     </div>

@@ -1,25 +1,25 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, ChangeDetectionStrategy, signal, inject } from '@angular/core';
 import { form, Field, required, SchemaPathTree, min, applyEach, pattern } from '@angular/forms/signals';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { Ticket, TicketOrder } from '@novarider/open-tombola/models';
 import { environment } from '../../environments/environment';
+import { NgTemplateOutlet } from '@angular/common';
 
 function TicketSchema(item: SchemaPathTree<Ticket>) {
   required(item.weight, { message: 'Ein Tipp ist erforderlich' });
   min(item.weight, 1, { message: 'Ein Tipp muss mindestens 0.001 kg sein' });
-  pattern(item.weight, /^\d*(\.\d{0,3})?$/, { message: 'Ein Tipp darf nicht mehr als drei Dezimalstellen haben' });
+  pattern(item.weight, /^[-]*\d*(\.\d{0,3})?$/, { message: 'Ein Tipp darf nicht mehr als drei Nachkommastellen haben' });
 }
 
 @Component({
-  imports: [RouterModule, Field],
+  imports: [RouterModule, Field, NgTemplateOutlet],
   selector: 'app-register-component',
   templateUrl: './register-component.html',
   styleUrl: './register-component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent {
-  private router: Router = inject(Router);
   private httpClient: HttpClient = inject(HttpClient);
 
   public registerFormModel = signal<TicketOrder>({

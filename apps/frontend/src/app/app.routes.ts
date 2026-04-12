@@ -8,11 +8,6 @@ import { Home } from './home/home';
 
 export const appRoutes: Route[] = [
   {
-    path: '',
-    redirectTo: 'home',
-    pathMatch: 'full',
-  },
-  {
     path: 'home',
     component: Home
   },
@@ -36,8 +31,14 @@ export const appRoutes: Route[] = [
     path: 'legal',
     component: Legal
   },
+  // catch all routes
+  {
+    path: '',
+    redirectTo: 'home',
+    pathMatch: 'full',
+  },
   {
     path: '**',
-    redirectTo: '',
+    redirectTo: 'home',
   },
 ];
