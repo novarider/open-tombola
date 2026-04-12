@@ -40,7 +40,7 @@ html {
 
 body {
   font-family: var(--default-font);
-  line-height: var(--line-height);
+  /* line-height: var(--line-height); */
   color: var(--font-color);
   background: var(--background-color);
   height: 100%;
@@ -70,11 +70,121 @@ img {
   height: auto;
 }
 
+/* app compo */
+
+app-root {
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-columns: [left-start] 1fr [main-start] 8fr [main-end] 1fr [right-end];
+
+  @media screen and (min-width: 600px) {
+    grid-template-columns: [left-start] 2fr [main-start] 6fr [main-end] 2fr [right-end];
+  }
+}
+
+.app-header {
+  background: var(--background-secondary-color);
+  color: var(--font-secondary-color);
+  padding: 1rem 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  grid-row: 1;
+  grid-column: 1 / 10;
+}
+
+.app-header .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+
+  flex-direction: column;
+
+  @media (min-width: 900px) {
+    flex-direction: row;
+  }
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.app-header nav {
+  display: flex;
+  gap: 24px;
+  flex-direction: column;
+  margin-top: var(--spacing-large);
+
+  @media (min-width: 900px) {
+    margin-top: 0;
+    flex-direction: row;
+  }
+}
+
+.app-header nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+  padding: 8px 16px;
+  border-radius: var(--border-radius-small);
+  transition: background 0.3s;
+}
+
+.app-header nav a:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.app-header nav a.active {
+  background: var(--background-secondary-color);
+  border: 2px solid var(--background-color);
+}
+
+.app-main {
+  background: var(--background-color);
+  grid-row: 2;
+
+  grid-column: main;
+}
+
+.app-footer {
+  background: var(--background-secondary-color);
+  color: var(--font-secondary-color);
+  padding: 24px 0;
+  text-align: center;
+
+  grid-row: 3;
+  grid-column: 1 / 10;
+}
+
+.app-footer .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  @media (min-width: 900px) {
+    flex-direction: row;
+  }
+}
+
+.app-footer a {
+  color: var(--font-secondary-color);
+
+  &:last-child {
+    margin-left: var(--spacing-large);
+  }
+}
+
 
 /** register comp **/
 .group {
   display: grid;
-  grid-area: repeat(1, minmax(0, 1fr));
 
   @media (min-width: 300px) {
     grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -109,7 +219,6 @@ img {
   gap: 10px;
 
   height: 60%;
-  overflow-y: scroll;
 }
 
 .ticket {
@@ -206,8 +315,11 @@ img {
 
 .submit-button-wrapper {
   width: 100%;
-  display: flex;
-  justify-content: end;
+
+  & button {
+    width: 100%;
+    margin-bottom: var(--spacing-large);
+  }
 }
 
 .button {
