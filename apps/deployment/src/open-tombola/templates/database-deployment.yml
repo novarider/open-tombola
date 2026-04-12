@@ -15,11 +15,21 @@ spec:
       labels:
         app: {{ .Release.Name }}-database
     spec:
+      volumes:
+      - name: pv-storage
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}-pvc-database
       containers:
         - name: {{ .Release.Name }}-database
           image: postgres
           envFrom:
             - secretRef:
                 name: env-database
+          env:
+            - name: PGDATA
+              value: /data
           ports:
             - containerPort: 5432
+          volumeMounts:
+          - name: pv-storage
+            mountPath: /data
