@@ -27,7 +27,7 @@ spec:
                 name: env-database
           env:
             - name: PGDATA
-              value: /data
+              value: /data/postgres-data
           ports:
             - containerPort: 5432
           volumeMounts:

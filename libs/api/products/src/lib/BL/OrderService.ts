@@ -68,12 +68,10 @@ export class OrderService {
     public async createPaymentSession(amount: number, orderId: string): Promise<Stripe.Response<Stripe.Checkout.Session>> {
         return await this.stripe.checkout.sessions.create({
             line_items: [{
-                // todo add env variable for stripe ticket product price id
                 price: this.ticketPriceId,
                 quantity: amount,
             }],
             mode: 'payment',
-            // todo add env variable for frontend base url
             success_url: `${this.baseUrl}/checkout/success?orderId=${orderId}`,
             cancel_url: `${this.baseUrl}/checkout/cancel`,
         });
