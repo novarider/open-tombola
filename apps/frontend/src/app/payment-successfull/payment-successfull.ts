@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from '../../environments/environment';
 
@@ -13,12 +13,14 @@ export class PaymentSuccessfull implements OnInit {
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   private httpClient: HttpClient = inject(HttpClient);
 
+  protected orderId = signal(undefined);
+
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe(params => {
-      const orderId = params['orderId'];
+      this.orderId.set(params['orderId']);
 
       const api_url = environment.API_URL;
-      this.httpClient.post<void>(`${api_url}/checkout/confirmPayment`, { orderId: orderId }).subscribe(() => {
+      this.httpClient.post<void>(`${api_url}/checkout/confirmPayment`, { orderId: this.orderId }).subscribe(() => {
         // nothing to do here
       });
     });

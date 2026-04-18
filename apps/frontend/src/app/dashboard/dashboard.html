@@ -1,0 +1,14 @@
+<h1>Dashboard</h1>
+<label for="password">Password</label>
+<form (submit)="this.onSubmit($event)">
+    <input type="password" [field]="form.password" id="password" />
+    <button type="submit">Daten laden</button>
+</form>
+
+@defer (when cachedPassword()!=='') {
+<app-dashboard-orders [password]="cachedPassword()"></app-dashboard-orders>
+} @placeholder {
+<section>
+    <p>Gib ein Passwort ein, um Daten anzuzeigen.</p>
+</section>
+}

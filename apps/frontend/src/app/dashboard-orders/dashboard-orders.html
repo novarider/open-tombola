@@ -1,0 +1,35 @@
+<h2>Bestellungen</h2>
+@if(orderResource.isLoading()) {
+<p>Lade Bestellungen...</p>
+} @else if (orderResource.error()) {
+<p>Fehler beim Laden der Bestellungen: {{ orderResource.error() | json }}</p>
+} @else if (orderResource.hasValue()) {
+@if(orderResource.value().length === 0) {
+<p>Keine Bestellungen gefunden.</p>
+} @else {
+<table>
+    <tr>
+        <th>OrderId</th>
+        <th>Vornmae</th>
+        <th>Nachname</th>
+        <th>Straße</th>
+        <th>Adresszeile 2</th>
+        <th>Postleitzahl</th>
+        <th>Ort</th>
+        <th>Land</th>
+    </tr>
+    @for (order of orderResource.value(); track order.orderid) {
+    <tr>
+        <td>{{ order.orderid }}</td>
+        <td>{{ order.firstname }}</td>
+        <td>{{ order.lastname }}</td>
+        <td>{{ order.street }}</td>
+        <td>{{ order.addressline2 }}</td>
+        <td>{{ order.postalcode }}</td>
+        <td>{{ order.city }}</td>
+        <td>{{ order.country }}</td>
+    </tr>
+    }
+</table>
+}
+}

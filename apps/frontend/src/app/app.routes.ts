@@ -5,6 +5,7 @@ import { PaymentCancelled } from './payment-cancelled/payment-cancelled';
 import { Legal } from './legal/legal';
 import { ActivateTickets } from './activate-tickets/activate-tickets';
 import { Home } from './home/home';
+import { Dashboard } from './dashboard/dashboard';
 
 export const appRoutes: Route[] = [
   {
@@ -30,6 +31,10 @@ export const appRoutes: Route[] = [
   {
     path: 'legal',
     component: Legal
+  },
+  {
+    path: 'dashboard',
+    component: Dashboard
   },
   // catch all routes
   {
