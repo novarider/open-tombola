@@ -18,17 +18,17 @@ export class TombolaController {
          *              (select fk_orderid, checkoutdoneat from checkouts where checkoutstatus = 'complete') as checkouts 
          *                  left join tickets on checkouts.fk_orderid = tickets.fk_orderid) as t1 left join orders on t1.fk_orderid = orders.orderid;
          */
-        this.app?.get('/tombola/entries', async (req, res) => {
-            const entries = await this.db?.dbOpenTombola.manyOrNone("SELECT * FROM tickets");
+        this.app?.get('/tombola/tickets', async (req, res) => {
+            const entries = await this.db?.dbOpenTombola.manyOrNone("SELECT * FROM tickets LIMIT 100");
             res.json(entries);
         });
 
-        this.app?.get('/tombola/entries/count', async (req, res) => {
+        this.app?.get('/tombola/tickets/count', async (req, res) => {
             const entries = await this.db?.dbOpenTombola.one("SELECT COUNT(*) as count FROM tickets");
             res.json(entries);
         });
 
-        this.app?.get('/tombola/entries/valid', async (_, res) => {
+        this.app?.get('/tombola/tickets/valid', async (_, res) => {
             // todo and check payment status as well (checkout === complete --> checkout process done --> not payment done)
             const query = `
             select orderid, firstname, lastname, weight, createdat, checkoutdoneat from 
@@ -39,12 +39,17 @@ export class TombolaController {
             res.json(entries);
         });
 
-        this.app?.get('/tombola/entries/unpaid', async (req, res) => {
+        this.app?.get('/tombola/tickets/unpaid', async (req, res) => {
             res.status(500).send(`Not implemlented.`);
         });
 
         this.app?.get('/tombola/orders/', async (req, res) => {
             const entries = await this.db?.dbOpenTombola.manyOrNone("SELECT * FROM orders");
+            res.json(entries);
+        });
+
+        this.app?.get('/tombola/orders/count', async (req, res) => {
+            const entries = await this.db?.dbOpenTombola.one("SELECT COUNT(*) as count FROM orders");
             res.json(entries);
         });
     }

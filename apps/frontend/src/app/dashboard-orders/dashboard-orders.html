@@ -1,12 +1,15 @@
-<h2>Bestellungen</h2>
 @if(orderResource.isLoading()) {
+<h2>Bestellungen</h2>
 <p>Lade Bestellungen...</p>
 } @else if (orderResource.error()) {
+<h2>Bestellungen</h2>
 <p>Fehler beim Laden der Bestellungen: {{ orderResource.error() | json }}</p>
 } @else if (orderResource.hasValue()) {
 @if(orderResource.value().length === 0) {
+<h2>Bestellungen</h2>
 <p>Keine Bestellungen gefunden.</p>
 } @else {
+<h2>Bestellungen ({{ orderCountResource.value()?.count }})</h2>
 <table>
     <tr>
         <th>OrderId</th>

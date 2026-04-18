@@ -7,6 +7,7 @@
 
 @defer (when cachedPassword()!=='') {
 <app-dashboard-orders [password]="cachedPassword()"></app-dashboard-orders>
+<app-dashboard-tickets [password]="cachedPassword()"></app-dashboard-tickets>
 } @placeholder {
 <section>
     <p>Gib ein Passwort ein, um Daten anzuzeigen.</p>

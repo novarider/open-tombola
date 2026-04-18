@@ -1,0 +1,28 @@
+@if(ticketResource.isLoading()) {
+<h2>Tickets</h2>
+<p>Lade Tickets...</p>
+} @else if (ticketResource.error()) {
+<h2>Tickets</h2>
+<p>Fehler beim Laden der Tickets: {{ ticketResource.error() | json }}</p>
+} @else if (ticketResource.hasValue()) {
+@if(ticketResource.value().length === 0) {
+<h2>Tickets</h2>
+<p>Keine Tickets gefunden.</p>
+} @else {
+<h2>Tickets ({{ ticketCountResource.value()?.count }})</h2>
+<table>
+    <tr>
+        <th>TicketId</th>
+        <th>OrderId</th>
+        <th>Weight</th>
+    </tr>
+    @for (ticket of ticketResource.value(); track ticket.ticketid) {
+    <tr>
+        <td>{{ ticket.ticketid}}</td>
+        <td>{{ ticket.fk_orderid}}</td>
+        <td>{{ ticket.weight}}</td>
+    </tr>
+    }
+</table>
+}
+}

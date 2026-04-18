@@ -3,10 +3,11 @@ import { FormsModule } from '@angular/forms';
 import { Field, form, required } from '@angular/forms/signals';
 import { RouterModule } from '@angular/router';
 import { DashboardOrders } from '../dashboard-orders/dashboard-orders';
+import { DashboardTickets } from '../dashboard-tickets/dashboard-tickets';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [RouterModule, FormsModule, Field, DashboardOrders],
+  imports: [RouterModule, FormsModule, Field, DashboardOrders, DashboardTickets],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
