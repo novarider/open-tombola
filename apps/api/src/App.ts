@@ -2,7 +2,7 @@ import { Inject, Service } from "typedi";
 import { Application } from "express-serve-static-core";
 import { AppMiddleware } from "./AppMiddleware";
 import { AppHeaders } from "./AppHeaders";
-import { RootController, CheckoutController, TicketController, DBConnection, HOST, PORT } from "@org/api/products";
+import { RootController, CheckoutController, TicketController, DBConnection, HOST, PORT, TombolaController } from "@org/api/products";
 
 @Service()
 export class App {
@@ -30,6 +30,9 @@ export class App {
     @Inject(() => TicketController)
     private ticketController: TicketController;
 
+    @Inject(() => TombolaController)
+    private tombolaController: TombolaController;
+
     @Inject(() => DBConnection)
     private dBConnection: DBConnection;
 
@@ -48,6 +51,7 @@ export class App {
         this.rootController.registerRoutes();
         this.checkoutController.registerRoutes();
         this.ticketController.registerRoutes();
+        this.tombolaController.registerRoutes();
 
         this.app.listen(this.port, this.host, () => {
             console.log(`[ ready ] http://${this.host}:${this.port}`);

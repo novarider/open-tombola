@@ -57,7 +57,7 @@ export class OrderService {
     public async checkCheckoutStatusForOrder(orderId: string): Promise<void> {
         const checkout = await this.checkoutsRepository.getCheckoutForOrder(orderId);
         const session = await this.stripe.checkout.sessions.retrieve(checkout.paymentreference);
-        await this.updateOrderCheckoutStatus(orderId, session.status);
+        await this.updateOrderCheckoutStatus(orderId, session.status ?? 'open');
         if (session.status !== 'complete') {
             throw new Error(`Payment for order ${orderId} not completed yet.`);
         } else {
