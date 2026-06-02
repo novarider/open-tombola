@@ -100,7 +100,7 @@
             <div class="ticket" tabindex="0" (click)="focusInput($event)" (keypress)="focusInput($event)">
                 <label [attr.for]="'weight'+i">Tipp {{i+1}}</label>
                 <input [attr.id]="'weight'+i" type="number" step=".001" [field]="ticket.weight"
-                    [attr.data-testid]="'input-weight-'+ i" />
+                    [attr.data-testid]="'input-weight-'+ i" /><span>kg</span>
 
                 @if (ticket.weight().invalid() &&
                 ticket.weight().touched()
