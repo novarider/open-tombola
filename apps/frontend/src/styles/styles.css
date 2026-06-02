@@ -13,6 +13,7 @@
 
   --border-radius-small: 4px;
   --spacing: 0.25rem;
+  --spacing-medium: 0.5rem;
   --spacing-large: 1em;
 
   --ticketInputColor1: #ffffff;
@@ -109,10 +110,15 @@ app-root {
   }
 }
 
+.app-header app-br-icon {
+  cursor: pointer;
+}
+
 .app-header h1 {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 600;
+  cursor: pointer;
 }
 
 .app-header nav {
@@ -179,6 +185,23 @@ app-root {
   &:last-child {
     margin-left: var(--spacing-large);
   }
+}
+
+/** home comp **/
+.ticket-button-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.ticket-button {
+  width: 300px;
+  padding: var(--spacing-medium);
+  color: var(--font-secondary-color);
+  background-color: var(--background-secondary-color);
+  border: none;
+  border-radius: var(--border-radius-small);
+  cursor: pointer;
 }
 
 
