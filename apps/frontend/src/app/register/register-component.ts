@@ -5,15 +5,16 @@ import { RouterModule } from '@angular/router';
 import { Ticket, TicketOrder } from '@novarider/open-tombola/models';
 import { environment } from '../../environments/environment';
 import { NgTemplateOutlet } from '@angular/common';
+import { TicketNumberFormatDirective } from '../ticket-number-format.directive';
 
 function TicketSchema(item: SchemaPathTree<Ticket>) {
   required(item.weight, { message: 'Ein Tipp ist erforderlich' });
   min(item.weight, 1, { message: 'Ein Tipp muss mindestens 0.001 kg sein' });
-  pattern(item.weight, /^[-]*\d*(\.\d{0,3})?$/, { message: 'Ein Tipp darf nicht mehr als drei Nachkommastellen haben' });
+  pattern(item.weight, /^[-]*\d*([.,]\d{0,3})?$/, { message: 'Ein Tipp muss eine Zahl mit maximal drei Nachkommastellen sein' });
 }
 
 @Component({
-  imports: [RouterModule, Field, NgTemplateOutlet],
+  imports: [RouterModule, Field, NgTemplateOutlet, TicketNumberFormatDirective],
   selector: 'app-register-component',
   templateUrl: './register-component.html',
   styleUrl: './register-component.css',

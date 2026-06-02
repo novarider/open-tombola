@@ -3,7 +3,7 @@ import { httpResource } from '@angular/common/http';
 import { Component, input, ResourceRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { OrderDBO, TicketDBO } from '@novarider/open-tombola/models';
+import { TicketDBO } from '@novarider/open-tombola/models';
 
 @Component({
   selector: 'app-dashboard-tickets',

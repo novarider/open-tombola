@@ -273,6 +273,7 @@ app-root {
 
   font-family: var(--monospace-font);
   text-align: right;
+  padding-right: 0;
   background: repeating-linear-gradient(to left, var(--ticketInputColor1), var(--ticketInputColor1) var(--ticketInputSpacing), var(--ticketInputColor2) var(--ticketInputSpacing), var(--ticketInputColor2) calc(var(--ticketInputSpacing) * 2));
 
   border-color: var(--ticketInputColor2);

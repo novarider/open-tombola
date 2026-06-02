@@ -67,10 +67,12 @@ async function buyTickets(page: Page, actions: (() => Promise<void>)[], tips: nu
   await expect(page.getByTestId('sucess-page-header')).toBeVisible({ timeout: 30000 });
 }
 
+const getFakeTip: () => number = () => faker.number.float({ min: 100.000, max: 999.999, fractionDigits: 3 });
+
 test('buy single ticket online', async ({ page }) => {
   await buyTickets(page,
     [],
-    [faker.number.int({ min: 10, max: 950 })]
+    [getFakeTip()]
   );
 });
 
@@ -80,7 +82,7 @@ test('buy 3 tickets online', async ({ page }) => {
       async () => await page.getByTestId('add-1-ticket').click(),
       async () => await page.getByTestId('add-1-ticket').click(),
     ],
-    Array.from({ length: 3 }).map(() => faker.number.int({ min: 10, max: 950 }))
+    Array.from({ length: 3 }).map(() => getFakeTip())
   );
 });
 
@@ -90,7 +92,7 @@ test('buy 10 tickets online', async ({ page }) => {
       async () => await page.getByTestId('add-10-tickets').click(),
       async () => await page.getByTestId('remove-ticket-0').click(),
     ],
-    Array.from({ length: 10 }).map(() => faker.number.int({ min: 10, max: 950 }))
+    Array.from({ length: 10 }).map(() => getFakeTip())
   );
 });
 
@@ -100,7 +102,7 @@ test('buy 20 tickets online', async ({ page }) => {
       async () => await page.getByTestId('add-20-tickets').click(),
       async () => await page.getByTestId('remove-ticket-0').click(),
     ],
-    Array.from({ length: 20 }).map(() => faker.number.int({ min: 10, max: 950 }))
+    Array.from({ length: 20 }).map(() => getFakeTip())
   );
 });
 
@@ -112,7 +114,7 @@ test('buy 50 tickets online', async ({ page }) => {
       async () => await page.getByTestId('add-10-tickets').click(),
       async () => await page.getByTestId('remove-ticket-0').click(),
     ],
-    Array.from({ length: 50 }).map(() => faker.number.int({ min: 10, max: 950 }))
+    Array.from({ length: 50 }).map(() => getFakeTip())
   );
 });
 
@@ -126,6 +128,6 @@ test('buy 100 tickets online', async ({ page }) => {
       async () => await page.getByTestId('add-20-tickets').click(),
       async () => await page.getByTestId('remove-ticket-0').click(),
     ],
-    Array.from({ length: 100 }).map(() => faker.number.int({ min: 10, max: 950 }))
+    Array.from({ length: 100 }).map(() => getFakeTip())
   );
 });
