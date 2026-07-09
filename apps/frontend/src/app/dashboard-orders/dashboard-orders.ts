@@ -1,9 +1,9 @@
 import { JsonPipe } from '@angular/common';
-import { httpResource } from '@angular/common/http';
-import { Component, input, ResourceRef } from '@angular/core';
+import { Component, inject, input, ResourceRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { OrderDBO } from '@novarider/open-tombola/models';
+import { DashboardService } from '../dashboard.service';
 
 @Component({
   selector: 'app-dashboard-orders',
@@ -12,23 +12,11 @@ import { OrderDBO } from '@novarider/open-tombola/models';
   styleUrl: './dashboard-orders.css',
 })
 export class DashboardOrders {
+  private dashboardService = inject(DashboardService);
+
   public password = input<string>('');
 
-  public orderResource: ResourceRef<OrderDBO[] | undefined> =
-    httpResource(() => ({
-      url: `http://localhost:3333/tombola/orders`,
-      method: 'GET',
-      headers: {
-        Authorization: btoa(this.password())
-      }
-    }));
+  public orderResource: ResourceRef<OrderDBO[] | undefined> = this.dashboardService.orderResource(this.password);
 
-  public orderCountResource: ResourceRef<{ count: number } | undefined> =
-    httpResource(() => ({
-      url: `http://localhost:3333/tombola/orders/count`,
-      method: 'GET',
-      headers: {
-        Authorization: btoa(this.password())
-      }
-    }));
+  public orderCountResource: ResourceRef<{ count: number } | undefined> = this.dashboardService.orderCountResource(this.password);
 }

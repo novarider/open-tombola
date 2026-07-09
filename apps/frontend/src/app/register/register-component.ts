@@ -1,11 +1,10 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, ChangeDetectionStrategy, signal, inject } from '@angular/core';
 import { form, Field, required, SchemaPathTree, min, applyEach, pattern } from '@angular/forms/signals';
 import { RouterModule } from '@angular/router';
 import { Ticket, TicketOrder } from '@novarider/open-tombola/models';
-import { environment } from '../../environments/environment';
 import { NgTemplateOutlet } from '@angular/common';
 import { TicketNumberFormatDirective } from '../ticket-number-format.directive';
+import { CheckoutService } from '../checkout.service';
 
 function TicketSchema(item: SchemaPathTree<Ticket>) {
   required(item.weight, { message: 'Ein Tipp ist erforderlich' });
@@ -21,7 +20,7 @@ function TicketSchema(item: SchemaPathTree<Ticket>) {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent {
-  private httpClient: HttpClient = inject(HttpClient);
+  private checkoutService: CheckoutService = inject(CheckoutService);
 
   public registerFormModel = signal<TicketOrder>({
     firstName: '',
@@ -57,12 +56,11 @@ export class RegisterComponent {
     event.preventDefault();
 
     if (this.registerForm().valid()) {
-      const api_url = environment.API_URL;
-      this.httpClient.post<{ paymentUrl: string }>(`${api_url}/checkout/create`, this.registerForm().value()).subscribe(async (response) => {
+      this.checkoutService.createCheckout(this.registerForm().value()).subscribe(async (response) => {
         window.location.href = response.paymentUrl;
       });
     } else {
-      // todo show error
+      // todo show error ???
     }
   }
 

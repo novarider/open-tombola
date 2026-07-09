@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
-import { environment } from '../../environments/environment';
+import { CheckoutService } from '../checkout.service';
 
 @Component({
   selector: 'app-payment-successfull',
@@ -11,18 +11,21 @@ import { environment } from '../../environments/environment';
 })
 export class PaymentSuccessfull implements OnInit {
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
-  private httpClient: HttpClient = inject(HttpClient);
+  private checkoutService: CheckoutService = inject(CheckoutService);
+  private destroyRef: DestroyRef = inject(DestroyRef);
 
-  protected orderId = signal(undefined);
+  protected orderId = signal<string | undefined>(undefined);
 
   ngOnInit(): void {
-    this.activatedRoute.queryParams.subscribe(params => {
+    this.activatedRoute.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
       this.orderId.set(params['orderId']);
 
-      const api_url = environment.API_URL;
-      this.httpClient.post<void>(`${api_url}/checkout/confirmPayment`, { orderId: this.orderId }).subscribe(() => {
-        // nothing to do here
-      });
+      const orderId = this.orderId();
+      if (orderId !== undefined) {
+        this.checkoutService.confirmPayment(orderId).subscribe(() => {
+          // nothing to do here
+        });
+      }
     });
   }
 }

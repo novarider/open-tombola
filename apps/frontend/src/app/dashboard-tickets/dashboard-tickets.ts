@@ -1,9 +1,10 @@
 import { JsonPipe } from '@angular/common';
 import { httpResource } from '@angular/common/http';
-import { Component, input, ResourceRef } from '@angular/core';
+import { Component, inject, input, ResourceRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TicketDBO } from '@novarider/open-tombola/models';
+import { DashboardService } from '../dashboard.service';
 
 @Component({
   selector: 'app-dashboard-tickets',
@@ -12,23 +13,12 @@ import { TicketDBO } from '@novarider/open-tombola/models';
   styleUrl: './dashboard-tickets.css',
 })
 export class DashboardTickets {
+  private dashboardService = inject(DashboardService);
   public password = input<string>('');
 
   public ticketResource: ResourceRef<TicketDBO[] | undefined> =
-    httpResource(() => ({
-      url: `http://localhost:3333/tombola/tickets`,
-      method: 'GET',
-      headers: {
-        Authorization: btoa(this.password())
-      }
-    }));
+    this.dashboardService.ticketResource(this.password);
 
   public ticketCountResource: ResourceRef<{ count: number } | undefined> =
-    httpResource(() => ({
-      url: `http://localhost:3333/tombola/tickets/count`,
-      method: 'GET',
-      headers: {
-        Authorization: btoa(this.password())
-      }
-    }));
+    this.dashboardService.ticketCountResource(this.password);
 }
