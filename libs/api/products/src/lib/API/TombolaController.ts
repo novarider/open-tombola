@@ -44,7 +44,7 @@ export class TombolaController {
         });
 
         this.app?.get('/tombola/orders/', async (req, res) => {
-            const entries = await this.db?.dbOpenTombola.manyOrNone("SELECT * FROM orders");
+            const entries = await this.db?.dbOpenTombola.manyOrNone("SELECT * FROM orders LIMIT 100");
             res.json(entries);
         });
 
