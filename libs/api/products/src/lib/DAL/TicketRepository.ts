@@ -42,15 +42,15 @@ export class TicketRepository implements ITicketRepository {
         return await this.dbConnection.dbOpenTombola.manyOrNone<string>("SELECT code FROM offlineTicketCodes WHERE used = false");
     }
 
-    public async getTickets(): Promise<unknown> {
+    public async getTickets(): Promise<TicketDBO[]> {
         return await this.dbConnection.dbOpenTombola.manyOrNone("SELECT * FROM tickets LIMIT 100");
     }
 
-    public async getTicketsCount(): Promise<unknown> {
+    public async getTicketsCount(): Promise<number> {
         return await this.dbConnection.dbOpenTombola.one("SELECT COUNT(*) as count FROM tickets");
     }
 
-    public async getValidTickets(): Promise<unknown> {
+    public async getValidTickets(): Promise<unknown[]> {
         // todo and check payment status as well (checkout === complete --> checkout process done --> not payment done)
         const query = `
             select orderid, firstname, lastname, weight, createdat, checkoutdoneat from 
@@ -60,7 +60,7 @@ export class TicketRepository implements ITicketRepository {
         return await this.dbConnection.dbOpenTombola.manyOrNone(query);
     }
 
-    public async getUnpaidTickets(): Promise<unknown> {
+    public async getUnpaidTickets(): Promise<unknown[]> {
         throw new Error("Not implemented.");
     }
 }

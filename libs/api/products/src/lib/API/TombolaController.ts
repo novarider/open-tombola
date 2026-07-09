@@ -2,6 +2,8 @@ import { Application } from "express";
 import { Service, Inject } from "typedi";
 import { OrderRepository } from "../DAL/OrderRepository";
 import { TicketRepository } from "../DAL/TicketRepository";
+import { ITicketRepository } from "../DAL/ITicketOrder";
+import { IOrderRepository } from "../DAL/IOrderRepository";
 
 @Service()
 export class TombolaController {
@@ -9,10 +11,10 @@ export class TombolaController {
     private app!: Application;
 
     @Inject(() => OrderRepository)
-    private orderRepository!: OrderRepository;
+    private orderRepository!: IOrderRepository;
 
     @Inject(() => TicketRepository)
-    private ticketRepository!: TicketRepository;
+    private ticketRepository!: ITicketRepository;
 
     public registerRoutes() {
         /**
