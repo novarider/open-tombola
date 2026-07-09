@@ -28,6 +28,9 @@
         ],
         "styles": [
           "apps/frontend/src/styles/styles.css"
+        ],
+        "scripts": [
+          "node_modules/html5-qrcode/html5-qrcode.min.js"
         ]
       },
       "configurations": {
@@ -36,7 +39,7 @@
             {
               "type": "initial",
               "maximumWarning": "500kb",
-              "maximumError": "1mb"
+              "maximumError": "2mb"
             },
             {
               "type": "anyComponentStyle",

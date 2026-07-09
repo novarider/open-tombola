@@ -1,9 +1,46 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
+import { QrScanner } from "../qr-scanner/qr-scanner";
+import { QrService } from '../qr-service';
+
+/**
+ * scanning works so far, also with url validation
+ * 
+ * todo
+ * - add multiple tickets to page with one scan
+ * - add error handling + message for users which deny camera access (fix button possible button switching without message)
+ */
 
 @Component({
   selector: 'app-activate-tickets',
-  imports: [],
+  imports: [QrScanner],
   templateUrl: './activate-tickets.html',
   styleUrl: './activate-tickets.css',
 })
-export class ActivateTickets {}
+export class ActivateTickets implements OnInit {
+  public showScanner: WritableSignal<boolean> = signal(false);
+  public showScanningError: WritableSignal<boolean> = signal(false);
+  private qrService: QrService = inject(QrService);
+
+  public debugText = '';
+
+  public startScanning() {
+    this.showScanningError.set(false);
+    this.showScanner.set(true);
+  }
+
+  public ngOnInit(): void {
+    this.qrService.onSuccessfullScan.subscribe((qrCode?: string) => {
+      if (qrCode) {
+        this.showScanner.set(false);
+        this.debugText = this.debugText + qrCode;
+      }
+    });
+
+    this.qrService.onInvalidDataIdentified.subscribe((qrCode?: string) => {
+      if (qrCode) {
+        this.showScanner.set(false);
+        this.showScanningError.set(true);
+      }
+    });
+  }
+}

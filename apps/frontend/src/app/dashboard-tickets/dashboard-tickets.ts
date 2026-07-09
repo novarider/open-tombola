@@ -1,5 +1,4 @@
 import { JsonPipe } from '@angular/common';
-import { httpResource } from '@angular/common/http';
 import { Component, inject, input, ResourceRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
