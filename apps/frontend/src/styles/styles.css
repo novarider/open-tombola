@@ -365,6 +365,11 @@ app-root {
   cursor: pointer;
 }
 
+button:disabled {
+    background-color: grey;
+    cursor: not-allowed;
+}
+
 .secondary {
   background-color: var(--secondary-color);
   color: var(--font-color);
@@ -374,6 +379,16 @@ app-root {
   background-color: var(--primary-color);
   color: var(--font-secondary-color);
 }
+
+/* button {
+    padding: 1em;
+    margin: 1em;
+    border: none;
+    border-radius: var(--border-radius-small);
+    background-color: var(--background-secondary-color);
+    color: var(--font-secondary-color);
+    cursor: pointer;
+}*/
 
 input {
   line-height: var(--line-height);

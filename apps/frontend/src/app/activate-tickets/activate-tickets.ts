@@ -21,7 +21,7 @@ export class ActivateTickets implements OnInit {
   public showScanningError: WritableSignal<boolean> = signal(false);
   private qrService: QrService = inject(QrService);
 
-  public debugText = '';
+  public tickets: Set<string> = new Set<string>();
 
   public startScanning() {
     this.showScanningError.set(false);
@@ -32,15 +32,23 @@ export class ActivateTickets implements OnInit {
     this.qrService.onSuccessfullScan.subscribe((qrCode?: string) => {
       if (qrCode) {
         this.showScanner.set(false);
-        this.debugText = this.debugText + qrCode;
+        this.tickets.add(qrCode);
       }
     });
 
     this.qrService.onInvalidDataIdentified.subscribe((qrCode?: string) => {
+      console.log(qrCode);
       if (qrCode) {
         this.showScanner.set(false);
         this.showScanningError.set(true);
       }
     });
+  }
+
+  public submitTickets() {
+    // todo 
+    // 1. check if tickets are valid and not already activated
+    // 2. gather user information 
+    // 3. submit both to backend to register
   }
 }

@@ -23,11 +23,17 @@ export class QrScanner implements OnInit, OnDestroy {
       (decodedText) => this.qrService.tryParseQrCode(decodedText),
       () => {
         // todo log error if needed
-        this.qrService.tryParseQrCode('some-error');
       }
     ).catch(() => {
       // if user permissions fails show initial screen again
-      this.qrService.tryParseQrCode('no-permission?');
+      const modal = document.getElementById("camera-permission-info");
+      modal?.addEventListener("toggle", (e)=> {
+        if(e.newState === "closed") {
+          navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+          this.qrService.tryParseQrCode("permission");
+        }
+      });
+      modal?.showPopover();
     })
   }
 

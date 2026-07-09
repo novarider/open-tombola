@@ -5,6 +5,8 @@ import { Observable, Subject } from "rxjs";
     providedIn: 'root'
 })
 export class QrService {
+    private readonly STATIC_URL_PART = 'https://80-jahre-bergrettung.at/tickets/activate?ticketId=';
+
     private _onTicketIdIdentified: Subject<string | undefined> = new Subject<string | undefined>();
     public onSuccessfullScan: Observable<string | undefined> = this._onTicketIdIdentified.asObservable();
 
@@ -13,22 +15,20 @@ export class QrService {
 
     public tryParseQrCode(qrCode: string): void {
         // qrCode string must be validated to be a url + ticket id if not discard it.
-        // todo parsing logic
         if (this.validateQrCodeContent(qrCode)) {
-            this._onTicketIdIdentified.next(qrCode);
+            this._onTicketIdIdentified.next(qrCode.replace(this.STATIC_URL_PART, ''));
         } else {
             this._onInvalidDataIdentified.next(qrCode);
         }
     }
 
     public validateQrCodeContent(content: string): boolean {
-        const staticUrlPart = 'https://80-jahre-bergrettung.at/tickets/activate?ticketId=';
 
-        if (!content.startsWith(staticUrlPart)) {
+        if (!content.startsWith(this.STATIC_URL_PART)) {
             return false;
         }
 
-        content = content.replace(staticUrlPart, '');
+        content = content.replace(this.STATIC_URL_PART, '');
         return content.length === 36; // check if the remaining string is a valid UUID
     }
 }

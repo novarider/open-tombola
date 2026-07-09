@@ -1,20 +1,35 @@
 <h1>Lose aktivieren</h1>
-<p>Aktiviere deine Lose in dem du den QR Code auf den losen scannst.</p>
+<p>Aktiviere deine Lose in dem du den QR Code auf den losen scannst. Bitte erlaube uns den Zugriff auf die Kamera wenn du danach gefragt wirst.</p>
 <p>
-    <b>Nur aktivierte Lose nehmen an der Verlosung teil, also vergesst nicht eure Lose zu aktivieren, damit ihr auch
-        wirklich die Chance auf den Gewinn habt!</b>
+  <b
+    >Nur aktivierte Lose nehmen an der Verlosung teil, also vergesst nicht eure
+    Lose zu aktivieren, damit ihr auch wirklich die Chance auf den Gewinn
+    habt!</b
+  >
 </p>
-@if(this.showScanningError()) {
-<p>Ungültiges Los gescannt.</p>
-}
 
-<code>{{this.debugText}}</code>
+@if(this.showScanningError()) {
+    <p>Ungültiges Los gescannt.</p>
+} 
 
 @if(!this.showScanner()) {
-<button (click)="this.startScanning()">Klicke um Lose hinzuzufügen</button>
-}
+    <button class="button secondary" (click)="this.startScanning()">Klicke um Lose hinzuzufügen</button>
+} 
 
 @if(this.showScanner()) {
-<button (click)="this.showScanner.set(false)">Abbrechen</button>
-<app-qr-scanner></app-qr-scanner>
+    <button class="button secondary" (click)="this.showScanner.set(false)">Abbrechen</button>
+    <app-qr-scanner></app-qr-scanner>
 }
+
+@if(this.tickets.size > 0) {
+    <h2>Gescannte Lose</h2>
+    <ol>
+    @for(ticket of this.tickets; track ticket) {
+        <li>{{ticket}}</li>
+    } 
+    </ol>
+} @else {
+    <p>Noch keine Lose gescannt</p>
+} 
+
+<button class="button primary" (click)="this.submitTickets()">Lose aktivieren</button>
