@@ -75,6 +75,10 @@ export class OrderRepository implements IOrderRepository {
         return await this.dbConnection.dbOpenTombola.manyOrNone<OrderDBO>("SELECT * FROM orders");
     }
 
+    public async getOrdersCount(): Promise<number> {
+        return await this.dbConnection.dbOpenTombola.one<number>("SELECT COUNT(*) as count FROM orders");
+    }
+
     public async getOrder(orderId: string): Promise<OrderDBO> {
         return await this.dbConnection.dbOpenTombola.one<OrderDBO>("SELECT * FROM orders WHERE orderId = $1", [orderId]);
     }
