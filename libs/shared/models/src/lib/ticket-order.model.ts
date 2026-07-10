@@ -17,7 +17,24 @@ export interface TicketOrder extends TicketOrderBase {
 }
 
 export interface ActivationOrder extends TicketOrderBase {
-  activationCodes: string[];
+  offlineTickets: {
+    ticketId: string,
+    weight: string
+  }[]
+}
+
+export interface OrderActivationSucceeded {
+  order: OrderDBO,
+  ticketIds: TicketDBO[]
+}
+
+export interface OrderActivationFailed {
+  unusedCodes: Set<string>,
+  usedCodes: Set<string>
+}
+
+export interface OfflineTicketValidateQuery extends OrderActivationFailed {
+  allCodesFound: boolean,
 }
 
 export interface OrderDBO {

@@ -24,7 +24,7 @@ export class CheckoutController {
     public registerRoutes() {
         this.app.post('/checkout/create', async (req: CheckoutCreateRequest, res) => {
             try {
-                const order = await this.orderService.saveOrder(req.body);
+                const order = await this.orderService.saveOrderWithTickets(req.body);
 
                 const quantity = req.body.tickets.length;
 

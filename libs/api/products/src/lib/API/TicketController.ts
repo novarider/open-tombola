@@ -4,6 +4,7 @@ import * as QRCode from "qrcode";
 import { TicketRepository } from "../DAL/TicketRepository";
 import { ITicketRepository } from "../DAL/ITicketOrder";
 import { ActivationOrder } from "@novarider/open-tombola/models";
+import { TicketService } from "../BL/TicketService";
 
 const random = require("random-string-generator");
 
@@ -18,6 +19,9 @@ export class TicketController {
 
     @Inject(() => TicketRepository)
     private ticketRepository: ITicketRepository;
+
+    @Inject(() => TicketService)
+    private ticketService: TicketService;
 
     public registerRoutes() {
         this.app.get('/tickets/offline/codes', async (req, res) => {
@@ -51,11 +55,11 @@ export class TicketController {
         });
 
         this.app.post('/tickets/offline/activate', async (req: OfflineTicketActivationRequest, res) => {
-            const baseUrl = "http://test.80-jahre-bergrettung.at/tickets/activate";
-
-            const dataString = await QRCode.toDataURL(baseUrl);
-
-            res.status(200).json(dataString);
+            try {
+                await this.ticketService.registerOfflineTickets(req.body);
+            } catch (e) {
+                res.status(500).send('Error');
+            }
         });
     }
 }

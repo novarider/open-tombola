@@ -46,6 +46,10 @@ export class TicketRepository implements ITicketRepository {
         return await this.dbConnection.dbOpenTombola.manyOrNone("SELECT * FROM tickets LIMIT 100");
     }
 
+    public async getTicketsById(ticketIds: string[]): Promise<TicketDBO[]> {
+        return await this.dbConnection.dbOpenTombola.manyOrNone(`SELECT * FROM tickets WHERE ticketId IN (${ticketIds.map(i => `'${i}', `)})`);
+    }
+
     public async getTicketsCount(): Promise<number> {
         return await this.dbConnection.dbOpenTombola.one("SELECT COUNT(*) as count FROM tickets");
     }
@@ -62,5 +66,13 @@ export class TicketRepository implements ITicketRepository {
 
     public async getUnpaidTickets(): Promise<unknown[]> {
         throw new Error("Not implemented.");
+    }
+
+    public updateOrderIdOnTicket(ticketId: string, orderid: string): TicketDBO {
+        throw new Error("Method not implemented.");
+    }
+
+    public updateWeightOnTicket(ticketId: string, weight: string): TicketDBO {
+        throw new Error("Method not implemented.");
     }
 }

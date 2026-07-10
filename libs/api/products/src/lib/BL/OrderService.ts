@@ -2,7 +2,7 @@ import { Stripe } from 'stripe';
 import Container, { Inject, Service } from "typedi";
 import { IOrderRepository } from "../DAL/IOrderRepository";
 import { OrderRepository } from "../DAL/OrderRepository";
-import { CheckoutDBO, OrderDBO, TicketOrder } from "@novarider/open-tombola/models";
+import { CheckoutDBO, OrderDBO, TicketOrder, TicketOrderBase } from "@novarider/open-tombola/models";
 import { ITicketRepository } from "../DAL/ITicketOrder";
 import { v7 as uuid } from "uuid";
 import { TicketRepository } from "../DAL/TicketRepository";
@@ -13,33 +13,38 @@ import { STRIPE_API_KEY, STRIPE_PRICE_ID, FRONTEND_BASE_URL } from '../env';
 @Service()
 export class OrderService {
     @Inject(() => OrderRepository)
-    private orderRepository: IOrderRepository;
+    private orderRepository!: IOrderRepository;
 
     @Inject(() => TicketRepository)
-    private ticketRepository: ITicketRepository;
+    private ticketRepository!: ITicketRepository;
 
     @Inject(() => CheckoutRepository)
-    private checkoutsRepository: ICheckoutsRepository;
+    private checkoutsRepository!: ICheckoutsRepository;
 
     private stripe = new Stripe(Container.get(STRIPE_API_KEY));
     private ticketPriceId: string = Container.get(STRIPE_PRICE_ID);
     private baseUrl: string = Container.get(FRONTEND_BASE_URL);
 
-    public async saveOrder(ticktetOrder: TicketOrder): Promise<OrderDBO> {
+    public async saveOrderWithTickets(ticktetOrder: TicketOrder): Promise<OrderDBO> {
+        const order = await this.saveOrder(ticktetOrder);
+        await this.ticketRepository.saveTickets(ticktetOrder.tickets.map(t => ({ fk_orderid: order.orderid, ticketid: uuid(), weight: Number.parseFloat(t.weight) })));
+        console.debug(`Saved Tickets for Order ${order.orderid}...`);
+        return order;
+    }
+
+    public async saveOrder(offlineOrder: TicketOrderBase): Promise<OrderDBO> {
         const order = await this.orderRepository.saveOrder({
             orderid: uuid(),
             createdat: new Date(Date.now()),
-            firstname: ticktetOrder.firstName,
-            lastname: ticktetOrder.lastName,
-            street: ticktetOrder.street,
-            addressline2: ticktetOrder.addressLine2,
-            postalcode: ticktetOrder.postalCode,
-            city: ticktetOrder.city,
-            country: ticktetOrder.country
+            firstname: offlineOrder.firstName,
+            lastname: offlineOrder.lastName,
+            street: offlineOrder.street,
+            addressline2: offlineOrder.addressLine2,
+            postalcode: offlineOrder.postalCode,
+            city: offlineOrder.city,
+            country: offlineOrder.country
         });
         console.debug(`Saved Order ${order.orderid}...`);
-        await this.ticketRepository.saveTickets(ticktetOrder.tickets.map(t => ({ fk_orderid: order.orderid, ticketid: uuid(), weight: Number.parseFloat(t.weight) })));
-        console.debug(`Saved Tickets for Order ${order.orderid}...`);
         return order;
     }
 
