@@ -3,6 +3,10 @@ import { ITicketRepository } from "../DAL/ITicketOrder";
 import { TicketRepository } from "../DAL/TicketRepository";
 import { ActivationOrder, OfflineTicketValidateQuery, OrderActivationFailed, OrderActivationSucceeded } from "@novarider/open-tombola/models";
 import { OrderService } from "./OrderService";
+import * as QRCode from "qrcode";
+import * as Papa from "papaparse";
+
+const random = require("random-string-generator");
 
 @Service()
 export class TicketService {
@@ -64,5 +68,36 @@ export class TicketService {
 
     public async updateOrderOnTickets(orderId: string, ticketId: string[]): Promise<void> {
         throw new Error(`Not implemented`)
+    }
+
+    public async createPrintTemplateCSV(): Promise<string> {
+        const codes = await this.ticketRepository.getAvailbleOfflineTicketCodes();
+        return Papa.unparse(codes.map(code => {
+            const baseUrl = 'https://80-jahre-bergrettung.at/tickets/activate?code=';
+            const fullUrl = baseUrl + code;
+            const encodedFullUrl = encodeURIComponent(fullUrl)
+            const qrCodeCellQuery = `=BILD("https://api.qrserver.com/v1/create-qr-code/?data=${encodedFullUrl}")`
+            return { code: code, baseUrl: fullUrl, encodedUrl: encodedFullUrl, qrCodeQuery: qrCodeCellQuery };
+        }));
+    }
+
+    public async createQRCodeForTicketCode(id: string): Promise<Buffer> {
+        const baseUrl = `http://test.80-jahre-bergrettung.at/tickets/activate?code=${id ?? ''}`;
+
+        return await QRCode.toBuffer(baseUrl);
+    }
+
+    public async createOfflineTicketCodes(toCreateAmount: number): Promise<void> {
+        const arr: string[] = [];
+
+        for (let i = 0; i < toCreateAmount; i++) {
+            arr.push(random(6, "uppernumeric"))
+        }
+
+        await this.ticketRepository.createOfflineTicketCodes(arr);
+    }
+
+    public async getAvailbleOfflineTicketCodes(): Promise<string[]> {
+        return await this.ticketRepository.getAvailbleOfflineTicketCodes();
     }
 }

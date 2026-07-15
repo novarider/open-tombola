@@ -39,7 +39,8 @@ export class TicketRepository implements ITicketRepository {
     }
 
     public async getAvailbleOfflineTicketCodes(): Promise<string[]> {
-        return await this.dbConnection.dbOpenTombola.manyOrNone<string>("SELECT code FROM offlineTicketCodes WHERE used = false");
+        const dbResult = await this.dbConnection.dbOpenTombola.manyOrNone<{ code: string }>("SELECT code FROM offlineTicketCodes WHERE used = false");
+        return dbResult.map(c => c.code);
     }
 
     public async getTickets(): Promise<TicketDBO[]> {
