@@ -6,6 +6,7 @@ import { Legal } from './legal/legal';
 import { ActivateTickets } from './activate-tickets/activate-tickets';
 import { Home } from './home/home';
 import { Dashboard } from './dashboard/dashboard';
+import { ActivationSuccessfull } from './activation-successfull/activation-successfull';
 
 export const appRoutes: Route[] = [
   {
@@ -15,6 +16,10 @@ export const appRoutes: Route[] = [
   {
     path: 'tickets/activate',
     component: ActivateTickets
+  },
+  {
+    path: 'tickets/activation/successfull',
+    component: ActivationSuccessfull
   },
   {
     path: 'tickets/register',

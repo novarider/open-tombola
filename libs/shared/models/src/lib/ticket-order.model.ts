@@ -16,11 +16,13 @@ export interface TicketOrder extends TicketOrderBase {
   tickets: Ticket[];
 }
 
+export interface TicketActivationData {
+  ticketId: string,
+  weight: string
+}
+
 export interface ActivationOrder extends TicketOrderBase {
-  offlineTickets: {
-    ticketId: string,
-    weight: string
-  }[]
+  offlineTickets: TicketActivationData[]
 }
 
 export interface OrderActivationSucceeded {

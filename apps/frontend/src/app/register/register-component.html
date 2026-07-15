@@ -4,37 +4,14 @@
     <app-personal-data-form [field]="registerForm.personalData"></app-personal-data-form>
 
     <h3>Wie viele Lose möchten Sie kaufen? (Stückpreis 2,50€)</h3>
-    <div class="tickets-container">
-        @for (ticket of registerForm.tickets; let i = $index; track i) {
-        <div class="ticket-wrapper">
-            <div class="ticket" tabindex="0" (click)="focusInput($event)" (keypress)="focusInput($event)">
-                <label [attr.for]="'weight'+i">Tipp {{i+1}}</label>
-                <input [attr.id]="'weight'+i" type="text" [field]="ticket.weight"
-                    [attr.data-testid]="'input-weight-'+ i" appTicketNumberFormat /><span>kg</span>
-
-                @if (ticket.weight().invalid() &&
-                ticket.weight().touched()
-                ) {
-                <div class="error">
-                    @for (error of ticket.weight().errors(); track error.kind) {
-                    <p>{{error.message}}</p>
-                    }
-                </div>
-                }
-
-                <button type="button" class="delete-ticket" (click)="removeTicket(i, $event)"
-                    [attr.data-testid]="'remove-ticket-'+ i">&#x1F5D1;</button>
-            </div>
-        </div>
-        }
-    </div>
+    <app-tickets-form [field]="registerForm.tickets"></app-tickets-form>
 
     <div class="add-ticket-buttons">
-        <button type="button" class="button secondary" data-testid="add-1-ticket" (click)="addTickets()">1 Los
+        <button type="button" class="button secondary" data-testid="add-1-ticket" (click)="addEmptyTickets(1)">1 Los
             hinzufügen</button>
-        <button type="button" class="button secondary" data-testid="add-10-tickets" (click)="addTickets(10)">10 Lose
+        <button type="button" class="button secondary" data-testid="add-10-tickets" (click)="addEmptyTickets(10)">10 Lose
             hinzufügen (25,00€)</button>
-        <button type="button" class="button secondary" data-testid="add-20-tickets" (click)="addTickets(20)">20 Lose
+        <button type="button" class="button secondary" data-testid="add-20-tickets" (click)="addEmptyTickets(20)">20 Lose
             hinzufügen (50,00€)</button>
     </div>
 

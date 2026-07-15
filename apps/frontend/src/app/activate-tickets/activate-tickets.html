@@ -1,42 +1,47 @@
 <h1>Alpschwein Verlosung 2026 - Lose aktivieren</h1>
-<p>Aktiviere deine Lose in dem du den QR Code auf den losen scannst. Bitte erlaube uns den Zugriff auf die Kamera wenn du danach gefragt wirst.</p>
+<p>Aktiviere deine Lose in dem du den QR Code auf den losen scannst. Bitte erlaube uns den Zugriff auf die Kamera wenn
+    du danach gefragt wirst.</p>
 <p>
-  <b
-    >Nur aktivierte Lose nehmen an der Verlosung teil, also vergesst nicht eure
-    Lose zu aktivieren, damit ihr auch wirklich die Chance auf den Gewinn
-    habt!</b
-  >
+    <b>Nur aktivierte Lose nehmen an der Verlosung teil, also vergesst nicht eure
+        Lose zu aktivieren, damit ihr auch wirklich die Chance auf den Gewinn
+        habt!</b>
 </p>
 
 <h2>Scanne deine gekauften Lose</h2>
 
 @if(this.showScanningError()) {
-    <p>Ungültiges Los gescannt.</p>
-} 
-
-@if(!this.showScanner()) {
-    <button class="button secondary" (click)="this.startScanning()">Klicke um Lose hinzuzufügen</button>
-} 
-
-@if(this.showScanner()) {
-    <button class="button secondary" (click)="this.showScanner.set(false)">Abbrechen</button>
-    <app-qr-scanner></app-qr-scanner>
+<p>Ungültiges Los gescannt.</p>
 }
 
-@if(this.ticketIds.size > 0) {
-    <h2>Gescannte Lose</h2>
-    <ol>
-    @for(ticket of this.ticketIds; track ticket) {
-        <li>{{ticket}}</li>
-    } 
-    </ol>
-} @else {
-    <p>Noch keine Lose gescannt</p>
-} 
+@if(!this.showScanner()) {
+<div class="submit-button-wrapper">
+    <button class="button secondary" (click)="this.startScanning()">Klicke um Lose hinzuzufügen</button>
+</div>
+}
+
+@if(this.showScanner()) {
+<div class="submit-button-wrapper">
+    <button class="button secondary" (click)="this.showScanner.set(false)">Abbrechen</button>
+</div>
+<app-qr-scanner></app-qr-scanner>
+}
+
+<app-tickets-form [field]="activateForm.tickets"></app-tickets-form>
+@if(this.activateForm.tickets().errors().length) {
+<p>Sie müssen Lose hinzufügen um fortzufahren!</p>
+}
 
 <h2>Gib uns deine Daten für das Gewinnspiel bekannt</h2>
 <form>
     <app-personal-data-form [field]="this.activateForm.personalData"></app-personal-data-form>
 </form>
 
-<button class="button primary" (click)="this.submitTickets()">Lose aktivieren</button>
+<div class="submit-button-wrapper">
+    <button class="button primary" (click)="this.submitTickets()">Lose aktivieren</button>
+</div>
+
+@if(this.errorResponse()) {
+<div class="server-error">
+    <p>Beim aktivieren Ihrer Lose it etwas schiefgelaufen, versuchen Sie es später noch einmal!</p>
+</div>
+}

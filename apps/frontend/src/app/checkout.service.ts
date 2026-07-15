@@ -1,7 +1,7 @@
-import { HttpClient, httpResource, HttpResourceRef } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { environment } from "../environments/environment";
-import { ActivationOrder, TicketOrder } from "@novarider/open-tombola/models";
+import { ActivationOrder, OrderActivationFailed, OrderActivationSucceeded, TicketOrder } from "@novarider/open-tombola/models";
 import { Observable } from "rxjs";
 
 @Injectable({
@@ -19,9 +19,7 @@ export class CheckoutService {
         return this.httpClient.post<void>(`${this.API_URL}/checkout/confirmPayment`, { orderId: orderId });
     }
 
-    public createOfflineCheckout: (data: ActivationOrder) => HttpResourceRef<void> = (data: ActivationOrder) => httpResource(() => ({
-        url: `${this.API_URL}/tickets/offline/activate`,
-        method: 'POST',
-        body: data,
-    }));
+    public createOfflineCheckout(data: ActivationOrder): Observable<OrderActivationSucceeded | OrderActivationFailed | undefined> {
+        return this.httpClient.post<OrderActivationSucceeded | OrderActivationFailed>(`${this.API_URL}/tickets/offline/activate`, data)
+    }
 }

@@ -240,8 +240,6 @@ app-root {
   }
 
   gap: 10px;
-
-  height: 60%;
 }
 
 .ticket {
@@ -251,7 +249,7 @@ app-root {
 
   display: grid;
   align-items: start;
-  grid-template-rows: 1.5em 1fr auto;
+  grid-template-rows: 1.5em 1fr auto auto;
   row-gap: var(--spacing);
   grid-template-columns: minmax(2em, 1fr) 1.5em;
 }
@@ -316,6 +314,15 @@ app-root {
   }
 }
 
+.ticket .ticket-id {
+  grid-row: 4 / 5;
+  grid-column: 1 / 2;
+
+  & p {
+    margin: 0;
+  }
+}
+
 .error {
   font-size: var(--font-size-small);
   line-height: var(--line-height-small);
@@ -366,8 +373,8 @@ app-root {
 }
 
 button:disabled {
-    background-color: grey;
-    cursor: not-allowed;
+  background-color: grey;
+  cursor: not-allowed;
 }
 
 .secondary {
@@ -379,16 +386,6 @@ button:disabled {
   background-color: var(--primary-color);
   color: var(--font-secondary-color);
 }
-
-/* button {
-    padding: 1em;
-    margin: 1em;
-    border: none;
-    border-radius: var(--border-radius-small);
-    background-color: var(--background-secondary-color);
-    color: var(--font-secondary-color);
-    cursor: pointer;
-}*/
 
 input {
   line-height: var(--line-height);

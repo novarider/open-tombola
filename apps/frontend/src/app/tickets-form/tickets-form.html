@@ -1,0 +1,34 @@
+@if(this.ticketsForm().value().length === 0) {
+<p>Noch keine Lose gescannt</p>
+} @else {
+<div class="tickets-container">
+  @for (ticket of ticketsForm; let i = $index; track i) {
+  <div class="ticket-wrapper">
+    <div class="ticket" tabindex="0" (click)="focusInput($event)" (keypress)="focusInput($event)">
+      <label [attr.for]="'weight'+i">Tipp {{i+1}}</label>
+      <input [attr.id]="'weight'+i" type="text" [field]="ticket.weight" [attr.data-testid]="'input-weight-'+ i"
+        appTicketNumberFormat /><span>kg</span>
+
+      @if (ticket.weight().invalid() && ticket.weight().touched() ) {
+      <div class="error">
+        @for (error of ticket.weight().errors(); track error.kind) {
+        <p>{{error.message}}</p>
+        }
+      </div>
+      }
+
+      @if (ticket.ticketId) {
+      <div class="ticket-id">
+        <p>{{ticket.ticketId().value()}}</p>
+      </div>
+      }
+
+      <button type="button" class="delete-ticket" (click)="removeTicket(i, $event)"
+        [attr.data-testid]="'remove-ticket-'+ i">
+        &#x1F5D1;
+      </button>
+    </div>
+  </div>
+  }
+</div>
+}

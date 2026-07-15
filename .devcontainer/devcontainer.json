@@ -32,7 +32,8 @@
 		"vscode": {
 			"extensions": [
 				"nrwl.angular-console",
-				"ms-playwright.playwright"
+				"ms-playwright.playwright",
+				"Angular.ng-template"
 			]
 		}
 	},
