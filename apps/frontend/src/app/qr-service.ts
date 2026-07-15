@@ -5,7 +5,7 @@ import { Observable, Subject } from "rxjs";
     providedIn: 'root'
 })
 export class QrService {
-    private readonly STATIC_URL_PART = 'https://80-jahre-bergrettung.at/tickets/activate?ticketId=';
+    private readonly STATIC_URL_PART = 'https://80-jahre-bergrettung.at/tickets/activate?code=';
 
     private _onTicketIdIdentified: Subject<string | undefined> = new Subject<string | undefined>();
     public onSuccessfullScan: Observable<string | undefined> = this._onTicketIdIdentified.asObservable();
@@ -23,12 +23,11 @@ export class QrService {
     }
 
     public validateQrCodeContent(content: string): boolean {
-
         if (!content.startsWith(this.STATIC_URL_PART)) {
             return false;
         }
 
         content = content.replace(this.STATIC_URL_PART, '');
-        return content.length === 36; // check if the remaining string is a valid UUID
+        return content.length === 6; // check if the remaining string is a valid activation code
     }
 }

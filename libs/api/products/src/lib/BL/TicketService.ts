@@ -17,28 +17,33 @@ export class TicketService {
     private orderRepository!: OrderService;
 
     public async registerOfflineTickets(offlineOrder: ActivationOrder): Promise<OrderActivationFailed | OrderActivationSucceeded> {
-        const activationInfo = await this.checkOfflineTicketAvailability(offlineOrder.offlineTickets.map(t => t.ticketId));
+        // todo add logic to exchange activation codes for real tickets (and create tickets)
+        // todo add logic to create order
+        // todo return order + ticket back to frontend
 
-        if (activationInfo.allCodesFound === true && activationInfo.usedCodes.size === 0) {
+        // const activationInfo = await this.checkOfflineTicketAvailability(offlineOrder.offlineTickets.map(t => t.activationCode));
 
-            const order = await this.orderRepository.saveOrder(offlineOrder);
+        // if (activationInfo.allCodesFound === true && activationInfo.usedCodes.size === 0) {
 
-            const filledTickets = [];
-            for (const ticket of offlineOrder.offlineTickets) {
-                await this.ticketRepository.updateWeightOnTicket(ticket.ticketId, ticket.weight);
-                filledTickets.push(await this.ticketRepository.updateOrderIdOnTicket(ticket.ticketId, order.orderid));
-            }
+        //     const order = await this.orderRepository.saveOrder(offlineOrder);
 
-            return {
-                order: order,
-                ticketIds: filledTickets
-            }
-        } else {
-            return {
-                unusedCodes: activationInfo.unusedCodes,
-                usedCodes: activationInfo.usedCodes,
-            }
-        }
+        //     const filledTickets = [];
+        //     for (const ticket of offlineOrder.offlineTickets) {
+        //         await this.ticketRepository.updateWeightOnTicket(ticket.activationCode, ticket.weight);
+        //         filledTickets.push(await this.ticketRepository.updateOrderIdOnTicket(ticket.activationCode, order.orderid));
+        //     }
+
+        //     return {
+        //         order: order,
+        //         ticketIds: filledTickets
+        //     }
+        // } else {
+        //     return {
+        //         unusedCodes: activationInfo.unusedCodes,
+        //         usedCodes: activationInfo.usedCodes,
+        //     }
+        // }
+        throw new Error('Not implemented');
     }
 
     public async checkOfflineTicketAvailability(ticketIds: string[]): Promise<OfflineTicketValidateQuery> {

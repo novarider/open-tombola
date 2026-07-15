@@ -1,10 +1,10 @@
-import { Component, ChangeDetectionStrategy, model, effect, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, model, effect } from '@angular/core';
 import { form, Field, FormValueControl, schema, SchemaPathTree, min, pattern, required, applyEach } from '@angular/forms/signals';
 import { RouterModule } from '@angular/router';
 import { TicketNumberFormatDirective } from '../ticket-number-format.directive';
-import { TicketOptionalTicketId } from '@novarider/open-tombola/models';
+import { TicketOptionalActivationCode } from '@novarider/open-tombola/models';
 
-export const ticketSchema = schema<TicketOptionalTicketId>((schemaPath: SchemaPathTree<TicketOptionalTicketId>) => {
+export const ticketSchema = schema<TicketOptionalActivationCode>((schemaPath: SchemaPathTree<TicketOptionalActivationCode>) => {
   required(schemaPath.weight, { message: 'Ein Tipp ist erforderlich' });
   min(schemaPath.weight, 1, { message: 'Ein Tipp muss mindestens 0.001 kg sein' });
   pattern(schemaPath.weight, /^[-]*\d*([.,]\d{0,3})?$/, { message: 'Ein Tipp muss eine Zahl mit maximal drei Nachkommastellen sein' });
@@ -16,8 +16,8 @@ export const ticketSchema = schema<TicketOptionalTicketId>((schemaPath: SchemaPa
   templateUrl: './tickets-form.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TicketFormComponent implements FormValueControl<TicketOptionalTicketId[]> {
-  public value = model<TicketOptionalTicketId[]>([]);
+export class TicketFormComponent implements FormValueControl<TicketOptionalActivationCode[]> {
+  public value = model<TicketOptionalActivationCode[]>([]);
 
   public ticketsForm = form(this.value, (schemaPath) => {
     applyEach(schemaPath, ticketSchema);

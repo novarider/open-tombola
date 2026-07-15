@@ -1,4 +1,4 @@
-import { Ticket } from "./ticket.model";
+import { Ticket, TicketOptionalActivationCode } from "./ticket.model";
 
 export interface TicketOrderBase {
   firstName: string;
@@ -16,13 +16,8 @@ export interface TicketOrder extends TicketOrderBase {
   tickets: Ticket[];
 }
 
-export interface TicketActivationData {
-  ticketId: string,
-  weight: string
-}
-
 export interface ActivationOrder extends TicketOrderBase {
-  offlineTickets: TicketActivationData[]
+  offlineTickets: TicketOptionalActivationCode[]
 }
 
 export interface OrderActivationSucceeded {

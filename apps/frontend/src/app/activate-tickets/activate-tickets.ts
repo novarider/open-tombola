@@ -2,7 +2,7 @@ import { Component, DestroyRef, inject, OnInit, signal, WritableSignal } from '@
 import { QrScanner } from "../qr-scanner/qr-scanner";
 import { QrService } from '../qr-service';
 import { PersonalDataFormComponent, personalDataSchema } from "../personal-data-form/personal-data-form";
-import { ActivationOrder, OrderActivationSucceeded, TicketActivationData, TicketOrderBase } from '@novarider/open-tombola/models';
+import { ActivationOrder, OrderActivationSucceeded, TicketOptionalActivationCode, TicketOrderBase } from '@novarider/open-tombola/models';
 import { form, Field, applyEach, apply, minLength } from '@angular/forms/signals';
 import { CheckoutService } from '../checkout.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,7 +12,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 interface FormDto {
   personalData: TicketOrderBase;
-  tickets: TicketActivationData[];
+  tickets: TicketOptionalActivationCode[];
 }
 
 @Component({
@@ -37,24 +37,24 @@ export class ActivateTickets implements OnInit {
     this.showScanner.set(true);
   }
 
-  private isTicketAlreadyPresent(ticketId: string): boolean {
-    return this.activateForm.tickets().value().findIndex(t => t.ticketId === ticketId) !== -1;
+  private isActivationCodeAlreadyPresent(activationCode: string): boolean {
+    return this.activateForm.tickets().value().findIndex(t => t.activationCode === activationCode) !== -1;
   }
 
   public ngOnInit(): void {
-    const initialTicketId = this.route.snapshot.queryParamMap.get('ticketId');
-    if (initialTicketId && isValidUUID(initialTicketId)) {
+    const initialActivationCode = this.route.snapshot.queryParamMap.get('code');
+    if (initialActivationCode && initialActivationCode.length === 6) {
       this.activateForm.tickets().value.update(v =>
-        [...v, { ticketId: initialTicketId, weight: '' }]
+        [...v, { activationCode: initialActivationCode, weight: '' }]
       );
     }
 
-    this.qrService.onSuccessfullScan.subscribe((ticketId?: string) => {
-      if (ticketId) {
+    this.qrService.onSuccessfullScan.subscribe((activationCode?: string) => {
+      if (activationCode) {
         this.showScanner.set(false);
-        if (!this.isTicketAlreadyPresent(ticketId)) {
+        if (!this.isActivationCodeAlreadyPresent(activationCode)) {
           this.activateForm.tickets().value.update(v =>
-            [...v, { ticketId: ticketId, weight: '' }]
+            [...v, { activationCode: activationCode, weight: '' }]
           );
         }
       }
