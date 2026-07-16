@@ -1,12 +1,28 @@
 import { Inject, Service } from "typedi";
-import { ITicketRepository } from "../DAL/ITicketOrder";
+import { ITicketRepository } from "../DAL/ITicketRepository";
 import { TicketRepository } from "../DAL/TicketRepository";
-import { ActivationOrder, OfflineTicketValidateQuery, OrderActivationFailed, OrderActivationSucceeded } from "@novarider/open-tombola/models";
+import { ActivationOrder, OrderActivationSucceeded, Ticket, TicketDBO } from "@novarider/open-tombola/models";
 import { OrderService } from "./OrderService";
 import * as QRCode from "qrcode";
 import * as Papa from "papaparse";
+import { Request, Response } from "express";
+import { ActivationCodesRepository } from "../DAL/ActivationCodesRepository";
+import { IActivationCodesRepository } from "../DAL/IActivationCodesRepository";
+import { v7 as uuid } from "uuid";
 
 const random = require("random-string-generator");
+
+interface OfflineTicketActivationRequest extends Request {
+    body: ActivationOrder
+}
+
+class ValidationError extends Error {
+    public validationError: string;
+    constructor(msg: string) {
+        super(msg);
+        this.validationError = msg;
+    }
+}
 
 @Service()
 export class TicketService {
@@ -16,67 +32,132 @@ export class TicketService {
     @Inject(() => OrderService)
     private orderRepository!: OrderService;
 
-    public async registerOfflineTickets(offlineOrder: ActivationOrder): Promise<OrderActivationFailed | OrderActivationSucceeded> {
-        // todo add logic to exchange activation codes for real tickets (and create tickets)
-        // todo add logic to create order
-        // todo return order + ticket back to frontend
+    @Inject(() => ActivationCodesRepository)
+    private activationCodesRepository!: IActivationCodesRepository;
 
-        // const activationInfo = await this.checkOfflineTicketAvailability(offlineOrder.offlineTickets.map(t => t.activationCode));
+    public async activateOfflineTicketsHandler(req: OfflineTicketActivationRequest, res: Response<unknown>): Promise<void> {
+        try {
+            this.validatePersonalData(req, res);
+            this.validateTicketData(req, res);
+            // submitted data have correct values
+            console.log(`Submitted data validated`)
 
-        // if (activationInfo.allCodesFound === true && activationInfo.usedCodes.size === 0) {
+            const data = req.body;
 
-        //     const order = await this.orderRepository.saveOrder(offlineOrder);
+            for (const t of data.offlineTickets) {
+                if (!await this.activationCodesRepository.findAvailableActivationCode(t.activationCode)) {
+                    throw new ValidationError(`Invalid activation code on ticket`);
+                }
+            }
+            // all codes are valid and available for redeeming
+            console.debug(`All Codes are valid and not redeemed`)
 
-        //     const filledTickets = [];
-        //     for (const ticket of offlineOrder.offlineTickets) {
-        //         await this.ticketRepository.updateWeightOnTicket(ticket.activationCode, ticket.weight);
-        //         filledTickets.push(await this.ticketRepository.updateOrderIdOnTicket(ticket.activationCode, order.orderid));
-        //     }
+            const order = await this.orderRepository.saveOrder({
+                addressLine2: data.addressLine2,
+                city: data.city,
+                country: data.country,
+                firstName: data.firstName,
+                lastName: data.lastName,
+                phonenumber: data.phonenumber,
+                postalCode: data.postalCode,
+                street: data.street,
+            })
 
-        //     return {
-        //         order: order,
-        //         ticketIds: filledTickets
-        //     }
-        // } else {
-        //     return {
-        //         unusedCodes: activationInfo.unusedCodes,
-        //         usedCodes: activationInfo.usedCodes,
-        //     }
-        // }
-        throw new Error('Not implemented');
-    }
+            const tickets = await this.saveTickets(data.offlineTickets.map(t => ({
+                weight: t.weight
+            })), order.orderid);
+            console.debug(`Order and tickets created`)
 
-    public async checkOfflineTicketAvailability(ticketIds: string[]): Promise<OfflineTicketValidateQuery> {
-        const providedTickets = new Set(ticketIds);
-        const foundTickets = new Set(await this.ticketRepository.getTicketsById(ticketIds));
+            await this.activationCodesRepository.markCodesAsUsed(data.offlineTickets.map(t => t.activationCode));
+            // order + tickets created and codes are marked as used
+            console.debug(`Codes redeemed`)
 
-        const eqSet = (xs: Set<unknown>, ys: Set<unknown>) =>
-            xs.size === ys.size &&
-            [...xs].every((x) => ys.has(x));
-
-        const retVal: OfflineTicketValidateQuery = {
-            allCodesFound: eqSet(providedTickets, foundTickets),
-            unusedCodes: new Set<string>(),
-            usedCodes: new Set<string>(),
-        }
-
-        for (const ticket of foundTickets) {
-            if (ticket.fk_orderid === null) {
-                retVal.unusedCodes.add(ticket.ticketid);
+            const retVal: OrderActivationSucceeded = {
+                order: order,
+                ticketIds: tickets
+            }
+            res.status(200).json(retVal);
+        } catch (e) {
+            console.error(e);
+            if (e instanceof ValidationError) {
+                this.returnValidationError(res, e);
             } else {
-                retVal.usedCodes.add(ticket.ticketid);
+                this.returnServerError(res);
             }
         }
-
-        return retVal;
     }
 
-    public async updateOrderOnTickets(orderId: string, ticketId: string[]): Promise<void> {
-        throw new Error(`Not implemented`)
+    private returnValidationError(res: Response, err: ValidationError) {
+        res.status(400).json(err);
+    }
+
+    private returnServerError(res: Response) {
+        res.status(500);
+    }
+
+    private validatePersonalData(req: OfflineTicketActivationRequest, res: Response<unknown, Record<string, any>>) {
+        const checkStringConstraints = (str: string): boolean =>
+            req.body.firstName.length === 0 || req.body.firstName.length > 50
+
+        if (checkStringConstraints(req.body.firstName)) {
+            throw new ValidationError(`Invalid firstname (length: 0 < x < 50)`);
+        }
+
+        if (checkStringConstraints(req.body.lastName)) {
+            throw new ValidationError(`Invalid lastname (length: 0 < x < 50)`);
+        }
+
+        if (checkStringConstraints(req.body.street)) {
+            throw new ValidationError(`Invalid street (length: 0 < x < 50)`);
+        }
+
+        if (checkStringConstraints(req.body.addressLine2)) {
+            throw new ValidationError(`Invalid addressline2 (length: 0 < x < 50)`);
+        }
+
+        if (checkStringConstraints(req.body.postalCode)) {
+            throw new ValidationError(`Invalid postalcode (length: 0 < x < 50)`);
+        }
+
+        if (checkStringConstraints(req.body.city)) {
+            throw new ValidationError(`Invalid city (length: 0 < x < 50)`);
+        }
+
+        if (checkStringConstraints(req.body.country)) {
+            throw new ValidationError(`Invalid country (length: 0 < x < 50)`);
+        }
+
+        if (checkStringConstraints(req.body.phonenumber)) {
+            throw new ValidationError(`Invalid phonenumber (length: 0 < x < 50)`);
+        }
+    }
+
+    private validateTicketData(req: OfflineTicketActivationRequest, res: Response) {
+        if (req.body.offlineTickets.length === 0) {
+            throw new ValidationError(`No activation codes present`);
+        }
+
+        for (const t of req.body.offlineTickets) {
+            if (!t.activationCode) {
+                throw new ValidationError(`No activation code on ticket`);
+            };
+
+            if (t.activationCode.length !== 6) {
+                throw new ValidationError(`Invalid activation code on ticket`);
+            }
+
+            if (!t.weight) {
+                throw new ValidationError(`No weight on ticket`);
+            };
+
+            if (!Number.isFinite(Number.parseFloat(t.weight)) || Number(t.weight) < 0.001) {
+                throw new ValidationError(`Invalid weight on ticket`);
+            };
+        }
     }
 
     public async createPrintTemplateCSV(): Promise<string> {
-        const codes = await this.ticketRepository.getAvailbleOfflineTicketCodes();
+        const codes = await this.activationCodesRepository.getAvailbleOfflineTicketCodes();
         return Papa.unparse(codes.map(code => {
             const baseUrl = 'https://80-jahre-bergrettung.at/tickets/activate?code=';
             const fullUrl = baseUrl + code;
@@ -99,10 +180,22 @@ export class TicketService {
             arr.push(random(6, "uppernumeric"))
         }
 
-        await this.ticketRepository.createOfflineTicketCodes(arr);
+        await this.activationCodesRepository.createOfflineTicketCodes(arr);
     }
 
     public async getAvailbleOfflineTicketCodes(): Promise<string[]> {
-        return await this.ticketRepository.getAvailbleOfflineTicketCodes();
+        return await this.activationCodesRepository.getAvailbleOfflineTicketCodes();
+    }
+
+    public async saveTickets(tickets: Ticket[], orderId: string): Promise<TicketDBO[]> {
+        const dbTickets = await this.ticketRepository.saveTickets(
+            tickets.map(t => ({
+                fk_orderid: orderId,
+                ticketid: uuid(),
+                weight: Number.parseFloat(t.weight)
+            }))
+        );
+        console.debug(`Saved Tickets ${tickets.length} to order ${orderId}...`);
+        return dbTickets;
     }
 }

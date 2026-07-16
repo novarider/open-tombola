@@ -101,7 +101,7 @@ export class ActivateTickets implements OnInit {
       this.checkoutService.createOfflineCheckout(data).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: (rsp) => {
           const response: OrderActivationSucceeded = rsp as OrderActivationSucceeded;
-          this.router.navigateByUrl(`/checkout/success?orderId=${response?.order?.orderid}`);
+          this.router.navigateByUrl(`tickets/activation/successfull?orderId=${response?.order?.orderid}`);
         },
         error: (err) => this.errorResponse.set(true),
       })

@@ -3,20 +3,19 @@ import Container, { Inject, Service } from "typedi";
 import { IOrderRepository } from "../DAL/IOrderRepository";
 import { OrderRepository } from "../DAL/OrderRepository";
 import { CheckoutDBO, OrderDBO, TicketOrder, TicketOrderBase } from "@novarider/open-tombola/models";
-import { ITicketRepository } from "../DAL/ITicketOrder";
 import { v7 as uuid } from "uuid";
-import { TicketRepository } from "../DAL/TicketRepository";
 import { ICheckoutsRepository } from '../DAL/ICheckoutsRepository';
 import { CheckoutRepository } from '../DAL/CheckoutRepository';
 import { STRIPE_API_KEY, STRIPE_PRICE_ID, FRONTEND_BASE_URL } from '../env';
+import { TicketService } from './TicketService';
 
 @Service()
 export class OrderService {
     @Inject(() => OrderRepository)
     private orderRepository!: IOrderRepository;
 
-    @Inject(() => TicketRepository)
-    private ticketRepository!: ITicketRepository;
+    @Inject(() => TicketService)
+    private ticketService!: TicketService;
 
     @Inject(() => CheckoutRepository)
     private checkoutsRepository!: ICheckoutsRepository;
@@ -27,7 +26,7 @@ export class OrderService {
 
     public async saveOrderWithTickets(ticktetOrder: TicketOrder): Promise<OrderDBO> {
         const order = await this.saveOrder(ticktetOrder);
-        await this.ticketRepository.saveTickets(ticktetOrder.tickets.map(t => ({ fk_orderid: order.orderid, ticketid: uuid(), weight: Number.parseFloat(t.weight) })));
+        await this.ticketService.saveTickets(ticktetOrder.tickets.map(t => ({ weight: t.weight })), order.orderid);
         console.debug(`Saved Tickets for Order ${order.orderid}...`);
         return order;
     }

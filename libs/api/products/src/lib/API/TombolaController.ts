@@ -2,7 +2,7 @@ import { Application } from "express";
 import { Service, Inject } from "typedi";
 import { OrderRepository } from "../DAL/OrderRepository";
 import { TicketRepository } from "../DAL/TicketRepository";
-import { ITicketRepository } from "../DAL/ITicketOrder";
+import { ITicketRepository } from "../DAL/ITicketRepository";
 import { IOrderRepository } from "../DAL/IOrderRepository";
 
 @Service()

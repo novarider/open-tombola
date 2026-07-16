@@ -1,11 +1,6 @@
-import { Application, Request } from "express";
+import { Application } from "express";
 import { Service, Inject } from "typedi";
-import { ActivationOrder } from "@novarider/open-tombola/models";
 import { TicketService } from "../BL/TicketService";
-
-interface OfflineTicketActivationRequest extends Request {
-    body: ActivationOrder
-}
 
 @Service()
 export class TicketController {
@@ -59,9 +54,9 @@ export class TicketController {
             }
         });
 
-        this.app.post('/tickets/offline/activate', async (req: OfflineTicketActivationRequest, res) => {
+        this.app.post('/tickets/offline/activate', async (req, res) => {
             try {
-                await this.ticketService.registerOfflineTickets(req.body);
+                await this.ticketService.activateOfflineTicketsHandler(req, res);
             } catch (e) {
                 res.status(500).send('Error');
             }

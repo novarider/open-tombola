@@ -25,15 +25,6 @@ export interface OrderActivationSucceeded {
   ticketIds: TicketDBO[]
 }
 
-export interface OrderActivationFailed {
-  unusedCodes: Set<string>,
-  usedCodes: Set<string>
-}
-
-export interface OfflineTicketValidateQuery extends OrderActivationFailed {
-  allCodesFound: boolean,
-}
-
 export interface OrderDBO {
   orderid: string;
   createdat: Date;
