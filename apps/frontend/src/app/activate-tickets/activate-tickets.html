@@ -1,13 +1,14 @@
 <h1>Alpschwein Verlosung 2026 - Lose aktivieren</h1>
-<p>Aktiviere deine Lose in dem du den QR Code auf den losen scannst. Bitte erlaube uns den Zugriff auf die Kamera wenn
-    du danach gefragt wirst.</p>
+<p>Aktivieren Sie ihre Lose in dem Sie den QR Code auf den losen scannen. Bitte erlauben Sie uns dafür den Zugriff auf
+    die Kamera wenn
+    Sie danach gefragt werden.</p>
 <p>
-    <b>Nur aktivierte Lose nehmen an der Verlosung teil, also vergesst nicht eure
-        Lose zu aktivieren, damit ihr auch wirklich die Chance auf den Gewinn
+    <b>Nur aktivierte Lose nehmen an der Verlosung teil, also vergesst nicht Eure
+        Lose zu aktivieren, damit Ihr auch wirklich die Chance auf den Gewinn
         habt!</b>
 </p>
 
-<h2>Scanne deine gekauften Lose</h2>
+<h2>Scannen Sie Ihre gekauften Lose</h2>
 
 @if(this.showScanningError()) {
 <p>Ungültiges Los gescannt.</p>
@@ -15,7 +16,7 @@
 
 @if(!this.showScanner()) {
 <div class="submit-button-wrapper">
-    <button class="button secondary" (click)="this.startScanning()">Klicke um Lose hinzuzufügen</button>
+    <button class="button secondary" (click)="this.startScanning()">Hier klicken um Lose hinzuzufügen</button>
 </div>
 }
 
@@ -31,7 +32,7 @@
 <p>Sie müssen Lose hinzufügen um fortzufahren!</p>
 }
 
-<h2>Gib uns deine Daten für das Gewinnspiel bekannt</h2>
+<h2>Geben Sie uns Ihre Daten für das Gewinnspiel bekannt</h2>
 <form>
     <app-personal-data-form [field]="this.activateForm.personalData"></app-personal-data-form>
 </form>
@@ -42,6 +43,6 @@
 
 @if(this.errorResponse()) {
 <div class="server-error">
-    <p>Beim aktivieren Ihrer Lose it etwas schiefgelaufen, versuchen Sie es später noch einmal!</p>
+    <p>Beim aktivieren Ihrer Lose ist etwas schiefgelaufen, versuchen Sie es später noch einmal!</p>
 </div>
 }

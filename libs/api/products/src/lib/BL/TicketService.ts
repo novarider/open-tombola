@@ -171,7 +171,7 @@ export class TicketService {
     }
 
     public async createQRCodeForTicketCode(id: string): Promise<Buffer> {
-        const baseUrl = `http://80-jahre-bergrettung.at/tickets/activate?code=${id ?? ''}`;
+        const baseUrl = `https://80-jahre-bergrettung.at/tickets/activate?code=${id ?? ''}`;
 
         return await QRCode.toBuffer(baseUrl);
     }
