@@ -30,7 +30,7 @@ export class TicketService {
     private ticketRepository!: ITicketRepository;
 
     @Inject(() => OrderService)
-    private orderRepository!: OrderService;
+    private orderService!: OrderService;
 
     @Inject(() => ActivationCodesRepository)
     private activationCodesRepository!: IActivationCodesRepository;
@@ -52,7 +52,7 @@ export class TicketService {
             // all codes are valid and available for redeeming
             console.debug(`All Codes are valid and not redeemed`)
 
-            const order = await this.orderRepository.saveOrder({
+            const order = await this.orderService.saveOrder({
                 addressLine2: data.addressLine2,
                 city: data.city,
                 country: data.country,
@@ -61,12 +61,15 @@ export class TicketService {
                 phonenumber: data.phonenumber,
                 postalCode: data.postalCode,
                 street: data.street,
-            })
+            });
 
             const tickets = await this.saveTickets(data.offlineTickets.map(t => ({
                 weight: t.weight
             })), order.orderid);
             console.debug(`Order and tickets created`)
+
+            await this.orderService.markOfflineOrderAsPayed(order.orderid);
+            console.debug(`Order marked as payed`)
 
             await this.activationCodesRepository.markCodesAsUsed(data.offlineTickets.map(t => t.activationCode));
             // order + tickets created and codes are marked as used
@@ -168,7 +171,7 @@ export class TicketService {
     }
 
     public async createQRCodeForTicketCode(id: string): Promise<Buffer> {
-        const baseUrl = `http://test.80-jahre-bergrettung.at/tickets/activate?code=${id ?? ''}`;
+        const baseUrl = `http://80-jahre-bergrettung.at/tickets/activate?code=${id ?? ''}`;
 
         return await QRCode.toBuffer(baseUrl);
     }

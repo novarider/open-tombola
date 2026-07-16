@@ -18,7 +18,14 @@ export class TombolaController {
 
     public registerRoutes() {
         /**
-         * Example query to get all valid entries
+         * tickets are valid when
+         *  - they have an existing order to them
+         *  - order had been payed (checkoutdoneat is set)
+         *      - checkout reference from stripe + checkoutstatus === complete
+         *      - checkout reference 'offline' + checkoutdone date set
+         *  - order had been created before end of tombola
+         * 
+         * Example query to get all valid entries (not finished)
          *      select orderid, firstname, lastname, weight, createdat, checkoutdoneat from 
          *          (select checkouts.fk_orderid, weight, checkoutdoneat from 
          *                  left join tickets on checkouts.fk_orderid = tickets.fk_orderid) as t1 left join orders on t1.fk_orderid = orders.orderid;

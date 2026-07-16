@@ -80,4 +80,9 @@ export class OrderService {
             cancel_url: `${this.baseUrl}/checkout/cancel`,
         });
     }
+
+    public async markOfflineOrderAsPayed(orderId: string): Promise<void> {
+        await this.checkoutsRepository.saveCheckout(orderId, 'offline');
+        await this.checkoutsRepository.markCheckoutComplete(orderId);
+    }
 }
