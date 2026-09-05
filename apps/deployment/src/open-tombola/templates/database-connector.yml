@@ -1,0 +1,32 @@
+# Pod not connected to anything used to connect via tty and have a look around the prod database. 
+#
+# !! Be cautious with your power !!
+#
+#   1.    kubectl exec -it database-looker-deployment-<hash> -- bash 
+#   2.    psql --host open-tombola-database --port 5432 --username postgres --dbname open-tombola --> get login credentials from .env files
+#
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database-looker-deployment
+  labels:
+    app: database-looker
+  namespace: open-tombola-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: database-looker
+  template:
+    metadata:
+      labels:
+        app: database-looker
+    spec:
+      containers:
+        - name: database-looker
+          image: postgres
+          envFrom:
+            - secretRef:
+                name: env-database
+          ports:
+            - containerPort: 5432
