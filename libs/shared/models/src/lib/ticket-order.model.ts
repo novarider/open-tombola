@@ -59,13 +59,13 @@ export interface TombolaInput {
 }
 
 export interface TombolaResultEntry {
-  firstName: string;
-  lastName: string;
+  firstname: string;
+  lastname: string;
   street: string;
-  postalCode: string;
+  postalcode: string;
   city: string;
   country: string;
-  guessedWeight: number;
+  guessed_weight: number;
   difference: number;
 }
 

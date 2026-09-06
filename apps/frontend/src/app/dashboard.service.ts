@@ -1,7 +1,7 @@
 import { Injectable, ResourceRef, Signal } from "@angular/core";
 import { environment } from "../environments/environment";
 import { httpResource } from "@angular/common/http";
-import { OrderDBO, TicketDBO } from "@novarider/open-tombola/models";
+import { OrderDBO, TicketDBO, TombolaResult } from "@novarider/open-tombola/models";
 
 @Injectable({
     providedIn: 'root',
@@ -42,6 +42,18 @@ export class DashboardService {
             method: 'GET',
             headers: {
                 Authorization: btoa(authorization())
+            }
+        }));
+
+    public tombolaResultResource: (authorization: Signal<string>, actualWeight: Signal<number>) => ResourceRef<TombolaResult | undefined> =
+        (authorization: Signal<string>, actualWeight: Signal<number>) => httpResource(() => ({
+            url: `${this.API_URL}/tombola/result`,
+            method: 'GET',
+            headers: {
+                Authorization: btoa(authorization())
+            },
+            params: {
+                weight: actualWeight()
             }
         }));
 }

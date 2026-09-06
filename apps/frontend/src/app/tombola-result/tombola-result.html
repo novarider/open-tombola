@@ -1,0 +1,34 @@
+<h2>Tombola Ergebnis</h2>
+<form>
+    <label for="weight">Gewicht: </label><input id="weight" [field]="weightForm.weight" />
+</form>
+@if(tombolaResult.isLoading()) {
+<p>Lade Ergebnis...</p>
+} @else if (tombolaResult.error()) {
+<p>Fehler beim Laden des Ergebnisses: {{ tombolaResult.error() | json }}</p>
+} @else if (tombolaResult.hasValue()) {
+<table>
+    <tr>
+        <th>Differenz</th>
+        <th>Tipp</th>
+        <th>Vorname</th>
+        <th>Nachname</th>
+        <th>Straße</th>
+        <th>PLZ</th>
+        <th>Stadt</th>
+        <th>Land</th>
+    </tr>
+    @for (entry of tombolaResult.value().result; track entry.firstname) {
+    <tr>
+        <td>{{ entry.difference }}</td>
+        <td>{{ entry.guessed_weight }}</td>
+        <td>{{ entry.firstname }}</td>
+        <td>{{ entry.lastname }}</td>
+        <td>{{ entry.street }}</td>
+        <td>{{ entry.postalcode}}</td>
+        <td>{{ entry.city }}</td>
+        <td>{{ entry.country }}</td>
+    </tr>
+    }
+</table>
+}

@@ -4,10 +4,11 @@ import { Field, form, required } from '@angular/forms/signals';
 import { RouterModule } from '@angular/router';
 import { DashboardOrders } from '../dashboard-orders/dashboard-orders';
 import { DashboardTickets } from '../dashboard-tickets/dashboard-tickets';
+import { TombolaResultComponent } from '../tombola-result/tombola-result';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [RouterModule, FormsModule, Field, DashboardOrders, DashboardTickets],
+  imports: [RouterModule, FormsModule, Field, DashboardOrders, DashboardTickets, TombolaResultComponent],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
