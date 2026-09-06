@@ -9,19 +9,12 @@ import { Request, Response } from "express";
 import { ActivationCodesRepository } from "../DAL/ActivationCodesRepository";
 import { IActivationCodesRepository } from "../DAL/IActivationCodesRepository";
 import { v7 as uuid } from "uuid";
+import { ValidationError } from "./ValidationError";
 
 const random = require("random-string-generator");
 
 interface OfflineTicketActivationRequest extends Request {
     body: ActivationOrder
-}
-
-class ValidationError extends Error {
-    public validationError: string;
-    constructor(msg: string) {
-        super(msg);
-        this.validationError = msg;
-    }
 }
 
 @Service()

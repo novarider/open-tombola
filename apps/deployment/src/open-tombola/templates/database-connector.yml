@@ -2,8 +2,11 @@
 #
 # !! Be cautious with your power !!
 #
-#   1.    kubectl exec -it database-looker-deployment-<hash> -- bash 
-#   2.    psql --host open-tombola-database --port 5432 --username postgres --dbname open-tombola --> get login credentials from .env files
+#   1.    kubectl apply -f apps/deployment/src/open-tombola/templates/database-connector.yml
+#   2.    kubectl exec -it database-looker-deployment-<hash> -- bash 
+#   3.    psql --host open-tombola-database --port 5432 --username postgres --dbname open_tombola --> get login credentials from .env files
+#   4.    <do the stuff needed>
+#   5.    kubectl delete -f apps/deployment/src/open-tombola/templates/database-connector.yml
 #
 apiVersion: apps/v1
 kind: Deployment

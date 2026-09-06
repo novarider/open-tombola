@@ -81,6 +81,41 @@ export class DBConnection {
         console.log(`Table offlineTicketCodes ready to use.`);
     }
 
+    private async createTombolaResultFunctionIfNotExists(): Promise<void> {
+        await this.dbOpenTombola.any(`
+           CREATE OR REPLACE FUNCTION tombola_result(
+                winningWeight real
+                )
+                RETURNS TABLE(
+                    difference real,
+                    guessed_weight real,
+                    firstname varchar(50),
+                    lastname varchar(50),
+                    street varchar(50),
+                    postalcode varchar(50),
+                    city varchar(50),
+                    country varchar(50)
+                )
+                AS $$
+                BEGIN
+                RETURN QUERY
+                -- SQL_statements to be executed
+                    SELECT t2.diff, t2.weight, orders.firstname, orders.lastname, orders.street, orders.postalcode, orders.city, orders.country FROM
+                        (SELECT t1.fk_orderid, weight, ABS(weight - @winningWeight) AS diff FROM 
+                            (SELECT fk_orderid FROM checkouts WHERE 
+                                checkoutdoneat IS NOT NULL AND 
+                                (paymentreference = 'offline' OR (paymentreference <> '' AND checkoutstatus = 'complete')
+                            )
+                            ) AS t1 LEFT JOIN tickets 
+                            ON t1.fk_orderid = tickets.fk_orderid) AS t2 
+                                LEFT JOIN orders 
+                                ON t2.fk_orderid = orders.orderid 
+                                ORDER BY diff ASC;
+                END;$$
+                LANGUAGE plpgsql;`);
+        console.log(`Function tombola_result ready to use.`);
+    }
+
     public async prepareOpenTombolaDB() {
         // todo check if order table exists, if not create it
         await this.createDBIfNotExists();
@@ -88,6 +123,7 @@ export class DBConnection {
         await this.createTicketsTableIfNotExists();
         await this.createCheckoutsTableIfNotExists();
         await this.createOfflineTicketsTableIfNotExists();
+        await this.createTombolaResultFunctionIfNotExists();
     }
 
     public close() {

@@ -53,3 +53,23 @@ export interface CheckoutDBO {
   paymentreference: string;
   paymentstatus: string;
 }
+
+export interface TombolaInput {
+  weight: number;
+}
+
+export interface TombolaResultEntry {
+  firstName: string;
+  lastName: string;
+  street: string;
+  postalCode: string;
+  city: string;
+  country: string;
+  guessedWeight: number;
+  difference: number;
+}
+
+export interface TombolaResult {
+  actualWeight: number;
+  result: TombolaResultEntry[];
+}

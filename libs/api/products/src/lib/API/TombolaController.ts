@@ -4,6 +4,9 @@ import { OrderRepository } from "../DAL/OrderRepository";
 import { TicketRepository } from "../DAL/TicketRepository";
 import { ITicketRepository } from "../DAL/ITicketRepository";
 import { IOrderRepository } from "../DAL/IOrderRepository";
+import { TombolaService } from "../BL/TombolaService";
+import { TombolaInput, TombolaResult } from "@novarider/open-tombola/models";
+import { Request, Response } from "express";
 
 @Service()
 export class TombolaController {
@@ -15,6 +18,9 @@ export class TombolaController {
 
     @Inject(() => TicketRepository)
     private ticketRepository!: ITicketRepository;
+
+    @Inject(() => TombolaService)
+    private tombolaService!: TombolaService;
 
     public registerRoutes() {
         /**
@@ -138,6 +144,14 @@ export class TombolaController {
             try {
                 const entries = await this.orderRepository.getOrdersCount();
                 res.json(entries);
+            } catch (e) {
+                res.status(500).send('Error')
+            }
+        });
+
+        this.app.get('/tombola/result', async (req: Request, res: Response<TombolaResult | string>) => {
+            try {
+                const result = await this.tombolaService.calculateTombolaResult(req, res);
             } catch (e) {
                 res.status(500).send('Error')
             }
